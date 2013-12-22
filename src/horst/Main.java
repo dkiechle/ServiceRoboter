@@ -7,7 +7,7 @@ package horst;
  * @author Daniel Kiechle
  *
  */
-public class Programm {
+public class Main {
 
 	/**
 	 * @param args
