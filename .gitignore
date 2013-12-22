@@ -1,3 +1,4 @@
 Ignoriere .nxd und .nxj Dateien 
 *.nxd
 *.nxj
+/bin
