@@ -3,6 +3,8 @@
  */
 package horst;
 
+import lejos.nxt.Button;
+
 /**
  * @author Daniel Kiechle
  *
@@ -14,6 +16,7 @@ public class Main {
 	 */
 	public static void main(String[] args) {
 		System.out.println("Hallo Horst der Gerät");
+		Button.waitForPress();
 
 	}
 
