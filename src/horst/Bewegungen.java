@@ -45,6 +45,7 @@ public class Bewegungen {
 	public void backward(int distance) {
 		Motor.A.rotate((int)(distance / RAD_UMFANG));
 		Motor.B.rotate((int)(distance / RAD_UMFANG));
+	
 	}
 	
 	/**
@@ -54,7 +55,7 @@ public class Bewegungen {
 	public void turn(int degree) {
 		int turn_ammount = 360 / degree;
 		// Geht von dem Fall aus, dass A sich Links von Fahrtrichtung befindet und B rechts davon.
-		Motor.A.rotate((int)-((KETTEN_UMFANG / turn_ammount) / RAD_UMFANG) * 360);
+		Motor.A.rotate((int)-((KETTEN_UMFANG / turn_ammount) / RAD_UMFANG) * 360,true);
 		Motor.B.rotate((int)((KETTEN_UMFANG / turn_ammount) / RAD_UMFANG) * 360);	
 	}
 
