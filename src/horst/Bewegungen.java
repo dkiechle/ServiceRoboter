@@ -2,10 +2,12 @@ package horst;
 
 import lejos.nxt.Motor;
 
+
+
 public class Bewegungen {
 	
-	final static short RAD_UMFANG = 0; // = Raddurchmesser * pi (3,14)
-	final static short KETTEN_UMFANG = 0; // = Kettenabstand * pi (3,14)
+	final static double RAD_UMFANG = 6.28; // = Raddurchmesser * pi (3,14)  2
+	final static double KETTEN_UMFANG = 30.144; // = Kettenabstand * pi (3,14) 9,6
 	
 	public Bewegungen() {
 		
@@ -24,8 +26,8 @@ public class Bewegungen {
 	 * @param distance in Milimeter anzugeben
 	 */
 	public void forward(int distance) {
-		Motor.A.rotate(-(distance / RAD_UMFANG));
-		Motor.B.rotate(-(distance / RAD_UMFANG));
+		Motor.A.rotate((int)(-(distance / RAD_UMFANG)));
+		Motor.B.rotate((int)(-(distance / RAD_UMFANG)));
 	}
 	
 	/**
@@ -41,8 +43,8 @@ public class Bewegungen {
 	 * @param distance in Milimeter anzugeben
 	 */
 	public void backward(int distance) {
-		Motor.A.rotate(distance / RAD_UMFANG);
-		Motor.B.rotate(distance / RAD_UMFANG);
+		Motor.A.rotate((int)(distance / RAD_UMFANG));
+		Motor.B.rotate((int)(distance / RAD_UMFANG));
 	}
 	
 	/**
@@ -52,8 +54,8 @@ public class Bewegungen {
 	public void turn(int degree) {
 		int turn_ammount = 360 / degree;
 		// Geht von dem Fall aus, dass A sich Links von Fahrtrichtung befindet und B rechts davon.
-		Motor.A.rotate(-((KETTEN_UMFANG / turn_ammount) / RAD_UMFANG) * 360);
-		Motor.B.rotate(((KETTEN_UMFANG / turn_ammount) / RAD_UMFANG) * 360);	
+		Motor.A.rotate((int)-((KETTEN_UMFANG / turn_ammount) / RAD_UMFANG) * 360);
+		Motor.B.rotate((int)((KETTEN_UMFANG / turn_ammount) / RAD_UMFANG) * 360);	
 	}
 
 }

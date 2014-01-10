@@ -3,7 +3,7 @@
  */
 package horst;
 
-import lejos.nxt.*;
+import lejos.nxt.Button;
 
 /**
  * @author Daniel Kiechle
@@ -13,7 +13,6 @@ public class Main {
 	
 	static Bewegungen beweg;
 	static Sonar sonar;
-	LCD lcd;
 
 	/**
 	 * @param args
@@ -23,11 +22,10 @@ public class Main {
 		// Folgende Zeilen sind zum testen des Sonars, sowie zum testen der Bewegung erstellt.
 		beweg = new Bewegungen();
 		sonar = new Sonar();
-		Button.waitForPress();
-		if(Button.RIGHT.isPressed()) {
+		//if(Button.RIGHT.isPressed()) {
 			sonar.sonarTest();
-		}
-		if(Button.LEFT.isPressed()) {
+		//}
+		if(true) {
 			beweg.forward(100);
 			beweg.turn(90);
 			beweg.backward(50);
