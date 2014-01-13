@@ -9,6 +9,11 @@ public class Map implements IMap {
 	Map (int cols,int rows){
 		speicher = new Mapnode[cols][rows];
 		position = new int [2];
+		for(int i=0;i!=cols;i++){
+			for(int j=0;j!=rows;j++){
+				speicher[i][j]= new Mapnode();
+			}
+		}
 	}
 	@Override
 	public void setWall(int grad, int distanz) {

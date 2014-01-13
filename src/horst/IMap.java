@@ -2,9 +2,9 @@ package horst;
 
 public interface IMap {
 
-	public void setWall(int grad, int distanz);
+	public void setWall(int grad, int distanz);//distanz = double??
 	
-	public void setLight(int grad, int distanz);
+	public void setLight(int grad, int distanz);//distanz = double??
 	
 	public int getSoll(int grad);
 	

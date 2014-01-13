@@ -2,9 +2,9 @@ package horst;
 
 public class Mapnode {
 	
-	int wand;
-	int feuer;
-	boolean messung;
+	public int wand;
+	public int feuer;
+	public boolean messung;
 	
 	Mapnode () {
 		wand = 0;

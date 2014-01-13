@@ -2,10 +2,10 @@ package horst;
 
 public interface ILokalisierung {
 	
-	public boolean nextStep();
+	public void nextStep();
 	
 	public boolean isFire();
 	
-	public boolean stepToFire();
+	public void stepToFire();
 	
 }
