@@ -40,7 +40,6 @@ public class Map implements IMap {
 	public boolean setPosition(int row, int col) {
 		position[0] = col; // Spalte
 		position[1] = row; // Zeile
-		if(!speicher[col][row].messung) speicher[0][0].messung = true;
 		return true;
 	}
 
@@ -63,6 +62,16 @@ public class Map implements IMap {
 	public void setRichtung(Richtung richtung) {
 		this.richtung = richtung;
 
+	}
+	@Override
+	public boolean getWall(int x, int y) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+	@Override
+	public byte getFeuer(int x, int y) {
+		// TODO Auto-generated method stub
+		return 0;
 	}
 
 }

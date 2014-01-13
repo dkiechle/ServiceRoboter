@@ -2,17 +2,36 @@ package horst;
 
 public class Mapnode {
 	
-	public int wand;
-	public int feuer;
-	public boolean messung;
+	byte wand;
+	byte feuer;
+	boolean gewesen;
 	
-	Mapnode () {
-		wand = 0;
-		feuer= 0;
-		messung = false;
+	public void addWand(){
+		if(wand==5)return;
+		wand++;
+	}
+	
+	public void addFeuer(){
+		feuer++;
+	} 
+	
+	public void setGewesen(){
+		gewesen = true;
+	}
+	
+	public byte getWand(){
+		return wand;
+	}
+	
+	public byte getFeuer(){
+		return feuer;
+	}
+	
+	public boolean getGewesen(){
+		return gewesen;
 	}
 	
 	public String toString() {
-		return "Wandwert:   "+wand+" Feuerwert:  "+feuer+" Messung:  "+messung;
+		return "Wandwert:   "+wand+" Feuerwert:  "+feuer+" Messung:  "+gewesen;
 	}
 }

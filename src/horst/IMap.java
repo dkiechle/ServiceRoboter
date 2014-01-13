@@ -18,4 +18,8 @@ public interface IMap {
 	
 	public void setRichtung(Richtung richtung);
 	
+	public boolean getWall(int x, int y);
+	
+	public byte getFeuer(int x, int y);
+	
 }
