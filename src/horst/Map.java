@@ -2,56 +2,61 @@ package horst;
 
 public class Map implements IMap {
 	
-	private Mapnode[][] speicher;
+	public Mapnode[][] speicher;
+	private int[] position;
+	private Richtung richtung;
 
 	Map (int cols,int rows){
-		speicher = new Mapnode[cols][rows]; 
+		speicher = new Mapnode[cols][rows];
+		position = new int [2];
 	}
 	@Override
 	public void setWall(int grad, int distanz) {
-		// TODO Auto-generated method stub
+		speicher[0][0].wand = speicher[0][0].wand+1;
+		System.out.println(speicher[0][0]);
+		
 
 	}
 
 	@Override
 	public void setLight(int grad, int distanz) {
-		// TODO Auto-generated method stub
+		speicher[0][0].feuer = speicher[0][0].feuer+1;
+		System.out.println(speicher[0][0]);
 
 	}
 
 	@Override
 	public int getSoll(int grad) {
-		// TODO Auto-generated method stub
-		return 0;
+		
+		return 255;
 	}
 
 	@Override
 	public boolean setPosition(int row, int col) {
-		// TODO Auto-generated method stub
-		return false;
+		position[0] = col; // Spalte
+		position[1] = row; // Zeile
+		if(!speicher[col][row].messung) speicher[0][0].messung = true;
+		return true;
 	}
 
 	@Override
 	public int getPosRow() {
-		// TODO Auto-generated method stub
-		return 0;
+		return position[1];
 	}
 
 	@Override
 	public int getPosCol() {
-		// TODO Auto-generated method stub
-		return 0;
+		return position[0];
 	}
 
 	@Override
 	public Richtung getPosRi() {
-		// TODO Auto-generated method stub
-		return null;
+		return richtung;
 	}
 
 	@Override
 	public void setRichtung(Richtung richtung) {
-		// TODO Auto-generated method stub
+		this.richtung = richtung;
 
 	}
 
