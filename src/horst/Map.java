@@ -17,7 +17,7 @@ public class Map implements IMap {
 	}
 	@Override
 	public void setWall(int grad, int distanz) {
-
+		
 		System.out.println(speicher[0][0]);
 		
 
@@ -25,7 +25,7 @@ public class Map implements IMap {
 
 	@Override
 	public void setLight(int grad, int distanz) {
-
+		
 		System.out.println(speicher[0][0]);
 
 	}
