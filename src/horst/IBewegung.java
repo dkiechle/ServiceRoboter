@@ -4,7 +4,7 @@ public interface IBewegung {
 	
 	public boolean goWay (Richtung[] richtungen);
 	
-	public boolean turn (int degree);
+	public boolean turn (double degree);
 	
 	public boolean move (int distance);
 	
