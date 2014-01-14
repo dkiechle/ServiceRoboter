@@ -4,9 +4,8 @@ import lejos.nxt.Motor;
 
 public class Bewegungen implements IBewegung {
 
-	final static double RAD_UMFANG = 12.56; // = Raddurchmesser * pi(3,14)*2
-	final static double KETTEN_UMFANG = 60.288; // = 2*Kettenabstand (9,6) *
-												// pi(3,14)
+	final static double RAD_UMFANG = 8.0; // = Raddurchmesser * pi (3,14) 2 
+	final static double KETTEN_UMFANG = 32.90; // =  Kettenabstand (14,3) * pi (3,14)
 
 	private IMap map;
 	private short dir;
@@ -16,6 +15,8 @@ public class Bewegungen implements IBewegung {
 	public Bewegungen(IMap map) {
 		this.map = map;
 		dir = translateDir(map.getPosRi());
+		Motor.A.setSpeed(240);
+		Motor.B.setSpeed(240);
 	}
 
 	private short translateDir(Richtung r) {
@@ -38,9 +39,11 @@ public class Bewegungen implements IBewegung {
 	 * @param distance
 	 *            in Milimeter anzugeben
 	 */
-	private void forward(int distance) {
-		Motor.A.rotate(((int) (-(distance / RAD_UMFANG))) * 360, true);
-		Motor.B.rotate(((int) (-(distance / RAD_UMFANG))) * 360);
+	private void forward(double distance) {
+		double faktor = distance / RAD_UMFANG;
+		int grad = (int)(faktor*360);
+		Motor.A.rotate(grad, true);
+		Motor.B.rotate(grad);
 	}
 
 	/**
@@ -49,9 +52,11 @@ public class Bewegungen implements IBewegung {
 	 * @param distance
 	 *            in Milimeter anzugeben
 	 */
-	private void backward(int distance) {
-		Motor.A.rotate(((int) (distance / RAD_UMFANG)) * 360, true);
-		Motor.B.rotate(((int) (distance / RAD_UMFANG)) * 360);
+	private void backward(double distance) {
+		double faktor = distance / RAD_UMFANG;
+		int grad = (int)(faktor*360);
+		Motor.A.rotate(grad, true);
+		Motor.B.rotate(grad);
 
 	}
 
@@ -63,14 +68,16 @@ public class Bewegungen implements IBewegung {
 	 *            negativ für Links
 	 */
 	@Override
-	public boolean turn(int degree) {
-		int turn_ammount = 360 / degree;
+	public boolean turn(double degree) {
+		double turn_amount = 360.0 / degree;
 		// Geht von dem Fall aus, dass A sich Links von Fahrtrichtung befindet
 		// und B rechts davon.
-		Motor.A.rotate(
-				(int) -((KETTEN_UMFANG / turn_ammount) / RAD_UMFANG) * 360,
-				true);
-		Motor.B.rotate((int) ((KETTEN_UMFANG / turn_ammount) / RAD_UMFANG) * 360);
+		Motor.A.setAcceleration(2000);
+		Motor.B.setAcceleration(2000);
+		Motor.A.rotate((int) (-((KETTEN_UMFANG / turn_amount) / RAD_UMFANG) * 720), true);
+		Motor.B.rotate((int) (((KETTEN_UMFANG / turn_amount) / RAD_UMFANG) * 720));
+		Motor.A.setAcceleration(6000);
+		Motor.B.setAcceleration(6000);
 		return true;
 	}
 
