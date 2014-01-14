@@ -28,42 +28,41 @@ public class Map implements IMap {
 	private byte[] getFeld (int grad,int distanz){
 		byte x;
 		byte y;
-		switch (distanz/90) {
+		switch (grad/90) {
 		case 0:
-			x = (byte) (position[0] + Math.floor((distanz*Math.cos(grad)/grš§e)+0.5));
-			y = (byte) (position[1] - Math.floor((distanz*Math.sin(grad)/grš§e)+0.5));
+			x = (byte) (position[0] + Math.floor((distanz*Math.cos(((grad*Math.PI)/180))/grš§e)+0.5));
+			y = (byte) (position[1] - Math.floor((distanz*Math.sin(((grad*Math.PI)/180))/grš§e)+0.5));
 			return new byte[] {x,y};
 			
 		case 1:
 			grad = grad-90;
-			y = (byte) (position[1] - Math.floor((distanz*Math.cos(grad)/grš§e)+0.5));
-			x = (byte) (position[0] - Math.floor((distanz*Math.sin(grad)/grš§e)+0.5));
+			y = (byte) (position[1] - Math.floor((distanz*Math.cos(((grad*Math.PI)/180))/grš§e)+0.5));
+			x = (byte) (position[0] - Math.floor((distanz*Math.sin(((grad*Math.PI)/180))/grš§e)+0.5));
 			return new byte[] {x,y};
 			
 		case 2:
 			grad = grad-180;
-			x = (byte) (position[0] - Math.floor((distanz*Math.cos(grad)/grš§e)+0.5));
-			y = (byte) (position[1] + Math.floor((distanz*Math.sin(grad)/grš§e)+0.5));
+			x = (byte) (position[0] - Math.floor((distanz*Math.cos(((grad*Math.PI)/180))/grš§e)+0.5));
+			y = (byte) (position[1] + Math.floor((distanz*Math.sin(((grad*Math.PI)/180))/grš§e)+0.5));
 			return new byte[] {x,y};
 			
 		case 3:
 			grad = grad-270;
-			y = (byte) (position[1] + Math.floor((distanz*Math.cos(grad)/grš§e)+0.5));
-			x = (byte) (position[0] + Math.floor((distanz*Math.sin(grad)/grš§e)+0.5));
+			y = (byte) (position[1] + Math.floor((distanz*Math.cos(((grad*Math.PI)/180))/grš§e)+0.5));
+			x = (byte) (position[0] + Math.floor((distanz*Math.sin(((grad*Math.PI)/180))/grš§e)+0.5));
 			return new byte[] {x,y};
 		}
 		return new byte[] {(byte)-1,(byte)-1};
 	}
 	
 	private boolean atFeld (byte x,byte y){
-		if (x>felder||y>felder) return false;
+		if (x>felder||x<0||y>felder||y<0) return false;
 		else return true;
 	}
 
 	@Override
 	public void setWall(int grad, int distanz) {
 		byte [] feld = getFeld(grad,distanz);
-		if(!atFeld(feld[0],feld[1])) return;
 		byte loc = searchMap(feld[0],feld[1]);
 		if(loc==-1) map.add(new Mapnode(feld[0],feld[1],(byte) 10));
 		else {
@@ -76,15 +75,24 @@ public class Map implements IMap {
 	@Override
 	public void setLight(int grad, int distanz) {
 		byte[] feld;
-		for(int t=1;t!=distanz;t++){
+		byte t = 0;
+		for(;t!=distanz;t++){
 			feld = getFeld(grad,t);
 			if(!atFeld(feld[0],feld[1]))return;
 			byte loc = searchMap(feld[0],feld[1]);
 			if(loc>-1){
-				if(map.get(loc).getZustand()==1||map.get(loc).getZustand()==11)return;
+				if(map.get(loc).getZustand()/10==1||map.get(loc).getZustand()/10==11)return;
 				map.get(loc).setZustand((byte) (map.get(loc).getZustand()+1));
+				for(byte[] loop = feld.clone();loop[0]==feld[0]&&loop[1]==feld[1];t++){
+					loop = getFeld(grad,t);
+				}
+				t--;
 			}else{
 				map.add(new Mapnode(feld[0],feld[1],(byte) 1));
+				for(byte[] loop = feld.clone();loop[0]==feld[0]&&loop[1]==feld[1];t++){
+					loop = getFeld(grad,t);
+				}
+				t--;
 			}
 			
 		} 
