@@ -63,6 +63,7 @@ public class Map implements IMap {
 	@Override
 	public void setWall(int grad, int distanz) {
 		byte [] feld = getFeld(grad,distanz);
+		if(!atFeld(feld[0],feld[1]))return;
 		byte loc = searchMap(feld[0],feld[1]);
 		if(loc==-1) map.add(new Mapnode(feld[0],feld[1],(byte) 10));
 		else {
