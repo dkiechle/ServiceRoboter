@@ -119,9 +119,8 @@ public boolean messen() {
 				}
 			turn(1);		
 			}
-			int distanz = SonicSens.getDistance();
-			map.setLight(lightDir, distanz);
-			System.out.println("LichtMax bei " + lightDir + "° Distanz:" + distanz);
+			map.setLight(lightDir);
+			System.out.println("LichtMax bei " + lightDir);
 			align();
 		}
 		lastTurn = lastTurn * -1;

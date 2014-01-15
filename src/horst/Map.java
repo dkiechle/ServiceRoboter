@@ -3,6 +3,8 @@ package horst;
 import java.util.ArrayList;
 import java.util.List;
 
+import lejos.nxt.Button;
+
 public class Map implements IMap {
 	
 	private List<Mapnode> map;
@@ -13,7 +15,7 @@ public class Map implements IMap {
 
 	public Map (byte felder,byte groese){
 		map = new ArrayList<Mapnode>();
-		position = new byte[] {0, 0}; //x,y
+		position = new byte[] {0, 0}; 
 		this.groese = groese;
 		this.felder = (byte) (felder-1);
 	}
@@ -26,44 +28,31 @@ public class Map implements IMap {
 	}
 	
 	private byte[] getFeld (int grad,int distanz){
-		byte x;
-		byte y;
 		switch (grad/90) {
-		case 0:
-			x = (byte) (position[0] + Math.floor((distanz*Math.cos(((grad*Math.PI)/180))/groese)+0.5));
-			y = (byte) (position[1] - Math.floor((distanz*Math.sin(((grad*Math.PI)/180))/groese)+0.5));
-			return new byte[] {x,y};
-			
-		case 1:
-			grad = grad-90;
-			y = (byte) (position[1] - Math.floor((distanz*Math.cos(((grad*Math.PI)/180))/groese)+0.5));
-			x = (byte) (position[0] - Math.floor((distanz*Math.sin(((grad*Math.PI)/180))/groese)+0.5));
-			return new byte[] {x,y};
-			
-		case 2:
-			grad = grad-180;
-			x = (byte) (position[0] - Math.floor((distanz*Math.cos(((grad*Math.PI)/180))/groese)+0.5));
-			y = (byte) (position[1] + Math.floor((distanz*Math.sin(((grad*Math.PI)/180))/groese)+0.5));
-			return new byte[] {x,y};
-			
 		case 3:
+			return new byte[] {(byte) (position[0] + Math.floor((distanz*Math.cos(((grad*Math.PI)/180))/groese)+0.5)),(byte) (position[1] - Math.floor((distanz*Math.sin(((grad*Math.PI)/180))/groese)+0.5))};
+		case 0:
+			grad = grad-90;
+			return new byte[] {(byte) (position[0] - Math.floor((distanz*Math.sin(((grad*Math.PI)/180))/groese)+0.5)),(byte) (position[1] - Math.floor((distanz*Math.cos(((grad*Math.PI)/180))/groese)+0.5))};
+		case 1:
+			grad = grad-180;
+			return new byte[] {(byte) (position[0] - Math.floor((distanz*Math.cos(((grad*Math.PI)/180))/groese)+0.5)),(byte) (position[1] + Math.floor((distanz*Math.sin(((grad*Math.PI)/180))/groese)+0.5))};
+		case 2:
 			grad = grad-270;
-			y = (byte) (position[1] + Math.floor((distanz*Math.cos(((grad*Math.PI)/180))/groese)+0.5));
-			x = (byte) (position[0] + Math.floor((distanz*Math.sin(((grad*Math.PI)/180))/groese)+0.5));
-			return new byte[] {x,y};
+			return new byte[] {(byte) (position[0] + Math.floor((distanz*Math.sin(((grad*Math.PI)/180))/groese)+0.5)),(byte) (position[1] + Math.floor((distanz*Math.cos(((grad*Math.PI)/180))/groese)+0.5))};
 		}
 		return new byte[] {(byte)-1,(byte)-1};
 	}
 	
-	private boolean atFeld (byte x,byte y){
-		if (x>felder||x<0||y>felder||y<0) return false;
-		else return true;
+	private boolean outOfMap (byte x,byte y){
+		if (x>felder||x<0||y>felder||y<0) return true;
+		else return false;
 	}
 
 	@Override
 	public void setWall(int grad, int distanz) {
 		byte [] feld = getFeld(grad,distanz);
-		if(!atFeld(feld[0],feld[1]))return;
+		if(outOfMap(feld[0],feld[1]))return;
 		byte loc = searchMap(feld[0],feld[1]);
 		if(loc==-1) map.add(new Mapnode(feld[0],feld[1],(byte) 10));
 		else {
@@ -74,12 +63,12 @@ public class Map implements IMap {
 	}
 
 	@Override
-	public void setLight(int grad, int distanz) {
+	public void setLight(int grad) {
 		byte[] feld;
 		byte t = 0;
-		for(;t!=distanz;t++){
+		for(;t!=255;t++){
 			feld = getFeld(grad,t);
-			if(!atFeld(feld[0],feld[1]))return;
+			if(outOfMap(feld[0],feld[1]))return;
 			byte loc = searchMap(feld[0],feld[1]);
 			if(loc>-1){
 				if(map.get(loc).getZustand()/10==1||map.get(loc).getZustand()/10==11)return;
@@ -101,9 +90,20 @@ public class Map implements IMap {
 
 	@Override
 	public int getSoll(int grad) {
-		return 0;
+		byte[] feld;
+		byte t = 0;
+		for(;t!=255;t++){
+			feld = getFeld(grad,t);
+			if(outOfMap(feld[0],feld[1])){
+				if (feld[0]==-1&&feld[1]==-1||feld[0]==(felder+1)&&feld[1]==-1||feld[0]==(felder+1)&&feld[1]==(felder+1)||feld[0]==-1&&feld[1]==(felder+1)) return 255;
+				return (t+(10-t%10)+5);
+			}
+			if(searchMap(feld[0],feld[1])==-1) continue;
+			if(map.get(searchMap(feld[0],feld[1])).getZustand()/10==1||map.get(searchMap(feld[0],feld[1])).getZustand()/10==11) return (t+(10-t%10)+5);
+		}
+		return 255;
 	}
-
+	
 	@Override
 	public boolean setPosition(int row, int col) {
 		position[0] = (byte) col;
@@ -138,6 +138,7 @@ public class Map implements IMap {
 		this.richtung = richtung;
 
 	}
+	
 	@Override
 	public boolean getWall(int x, int y) {
 		byte loc = searchMap((byte)x,(byte)y);
@@ -157,10 +158,17 @@ public class Map implements IMap {
 		}
 		return 0;
 	}
+	
+	@Override
+	public byte getlength(){
+		return (byte) (felder+1);
+	}
+	
 	@Override
 	public String toString (){
 		String output = "Apos: "+position[0]+"/"+position[1]+"\nFelder: "+(felder+1)+"\nGroe§e: "+groese+"\n";
 		for (int i=0;i!=map.size();i++){
+			if(i%5==0)Button.waitForPress();
 			output = output+map.get(i).toString()+"\n";
 		}
 		return output;

@@ -4,7 +4,7 @@ public interface IMap {
 
 	public void setWall(int grad, int distanz);//distanz = double??
 	
-	public void setLight(int grad, int distanz);//distanz = double??
+	public void setLight(int grad);//distanz = double??
 	
 	public int getSoll(int grad);
 	
@@ -21,5 +21,7 @@ public interface IMap {
 	public boolean getWall(int x, int y);
 	
 	public byte getFeuer(int x, int y);
+
+	byte getlength();
 	
 }

@@ -18,14 +18,14 @@ public class Main {
 	 */
 	public static void main(String[] args) {
 		Map map;
-		map = new Map(60,60);
-		for(int i=0;i<59;i++){
-			for(int j=0;j<59;j++){
-				map.speicher[i][j].feuer = 10;
-				map.speicher[i][j].wand  = 10;
-				System.out.println(" "+i+"  "+j);
-			}
-		}
+		map = new Map((byte)20,(byte)20);
+		map.setPosition(10, 10);
+		map.setRichtung(Richtung.SOUTH);
+		map.setWall(145, 90);
+		map.setWall(20, 60);
+		map.setLight(93);
+		System.out.println(map);
+		
 	}
 
 }
