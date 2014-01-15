@@ -2,4 +2,4 @@ Ignoriere .nxd und .nxj Dateien
 *.nxd
 *.nxj
 /bin
-Main.java
+src/horst/Main.java
