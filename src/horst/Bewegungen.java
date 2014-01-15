@@ -4,11 +4,12 @@ import lejos.nxt.Motor;
 
 public class Bewegungen implements IBewegung {
 
-	final static double RAD_UMFANG = 8.0; // = Raddurchmesser * pi (3,14) 2
-	final static double KETTEN_UMFANG = 32.90; // = Kettenabstand (14,3) * pi
+	final static double RAD_UMFANG = 10.08; // = Raddurchmesser * pi (3,14) 2
+	final static double KETTEN_UMFANG = 59.9; // = Kettenabstand (14,3) * pi 59,5
 												// (3,14)
 
 	private short dir;
+	private int distanceDone;
 
 	private final short N = 0, E = 90, S = 180, W = 270;
 
@@ -20,6 +21,7 @@ public class Bewegungen implements IBewegung {
 	 */
 	public Bewegungen(IMap map) {
 		dir = translateDir(map.getPosRi());
+		distanceDone = 0;
 		Motor.A.setSpeed(240);
 		Motor.B.setSpeed(240);
 	}
@@ -42,7 +44,7 @@ public class Bewegungen implements IBewegung {
 	 * Fährt vorwärts bis auf bestimmte Distanz
 	 * 
 	 * @param distance
-	 *            in Milimeter anzugeben
+	 *            in Centimeter anzugeben
 	 */
 	private void forward(double distance) {
 		double faktor = distance / RAD_UMFANG;
@@ -55,7 +57,7 @@ public class Bewegungen implements IBewegung {
 	 * Fährt rückwärts bis auf bestimmte Distanz
 	 * 
 	 * @param distance
-	 *            in Milimeter anzugeben
+	 *            in Centimeter anzugeben
 	 */
 	private void backward(double distance) {
 		double faktor = distance / RAD_UMFANG;
@@ -74,15 +76,19 @@ public class Bewegungen implements IBewegung {
 	 */
 	@Override
 	public boolean turn(double degree) {
-		double turn_amount = 360.0 / degree;
+		/*
+		 * Grad 
+		 */
+		double turn_amount = 360 / degree;
 		// Geht von dem Fall aus, dass A sich Links von Fahrtrichtung befindet
 		// und B rechts davon.
+		double distance = KETTEN_UMFANG / turn_amount;
+		double faktor = distance / RAD_UMFANG;
+		int grad = (int) (faktor * 360);
 		Motor.A.setAcceleration(2000);
 		Motor.B.setAcceleration(2000);
-		Motor.A.rotate(
-				(int) (-((KETTEN_UMFANG / turn_amount) / RAD_UMFANG) * 720),
-				true);
-		Motor.B.rotate((int) (((KETTEN_UMFANG / turn_amount) / RAD_UMFANG) * 720));
+		Motor.A.rotate((int)-grad,true);
+		Motor.B.rotate((int)grad);
 		Motor.A.setAcceleration(6000);
 		Motor.B.setAcceleration(6000);
 		return true;
@@ -166,6 +172,19 @@ public class Bewegungen implements IBewegung {
 			}
 		}
 		return true;
+	}
+
+	public void test(double degree) {
+		Motor.A.rotate(1800, true);
+		Motor.B.rotate(1800);
+	}
+	
+	private boolean isWrong() {
+		return false; 
+	}
+	
+	private void fixWrong()  {
+		
 	}
 
 }
