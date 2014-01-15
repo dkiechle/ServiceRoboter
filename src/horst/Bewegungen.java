@@ -4,16 +4,21 @@ import lejos.nxt.Motor;
 
 public class Bewegungen implements IBewegung {
 
-	final static double RAD_UMFANG = 8.0; // = Raddurchmesser * pi (3,14) 2 
-	final static double KETTEN_UMFANG = 32.90; // =  Kettenabstand (14,3) * pi (3,14)
+	final static double RAD_UMFANG = 8.0; // = Raddurchmesser * pi (3,14) 2
+	final static double KETTEN_UMFANG = 32.90; // = Kettenabstand (14,3) * pi
+												// (3,14)
 
-	private IMap map;
 	private short dir;
 
-	private short N = 0, E = 90, S = 180, W = 270;
+	private final short N = 0, E = 90, S = 180, W = 270;
 
+	/**
+	 * Initiert die Bewegungsklasse und setzt die Geschwindigkeit auf ein
+	 * bestimmtes Niveau.
+	 * 
+	 * @param map
+	 */
 	public Bewegungen(IMap map) {
-		this.map = map;
 		dir = translateDir(map.getPosRi());
 		Motor.A.setSpeed(240);
 		Motor.B.setSpeed(240);
@@ -41,7 +46,7 @@ public class Bewegungen implements IBewegung {
 	 */
 	private void forward(double distance) {
 		double faktor = distance / RAD_UMFANG;
-		int grad = (int)(faktor*360);
+		int grad = (int) (faktor * 360);
 		Motor.A.rotate(grad, true);
 		Motor.B.rotate(grad);
 	}
@@ -54,7 +59,7 @@ public class Bewegungen implements IBewegung {
 	 */
 	private void backward(double distance) {
 		double faktor = distance / RAD_UMFANG;
-		int grad = (int)(faktor*360);
+		int grad = (int) (faktor * 360);
 		Motor.A.rotate(grad, true);
 		Motor.B.rotate(grad);
 
@@ -74,7 +79,9 @@ public class Bewegungen implements IBewegung {
 		// und B rechts davon.
 		Motor.A.setAcceleration(2000);
 		Motor.B.setAcceleration(2000);
-		Motor.A.rotate((int) (-((KETTEN_UMFANG / turn_amount) / RAD_UMFANG) * 720), true);
+		Motor.A.rotate(
+				(int) (-((KETTEN_UMFANG / turn_amount) / RAD_UMFANG) * 720),
+				true);
 		Motor.B.rotate((int) (((KETTEN_UMFANG / turn_amount) / RAD_UMFANG) * 720));
 		Motor.A.setAcceleration(6000);
 		Motor.B.setAcceleration(6000);
@@ -129,6 +136,27 @@ public class Bewegungen implements IBewegung {
 			dir += 90 % 360;
 			goRichtung(richtung);
 		} else {
+			if ((translateDir(richtung) - dir) < (dir - translateDir(richtung) + 360)) {
+				turn(translateDir(richtung) - dir);
+				dir = translateDir(richtung);
+			} else {
+				turn(-(dir - translateDir(richtung) + 360));
+				dir = translateDir(richtung);
+			}
+		}
+		return true;
+	}
+
+	/**
+	 * Erlaubt es, den Roboter ohne Bewegegungsbefehl in eine der 4
+	 * Himmelsrichtungen zu drehen.
+	 * 
+	 * @param richtung
+	 *            Eine Richtung vom Typ Richtun
+	 * @return
+	 */
+	public boolean turnTo(Richtung richtung) {
+		if (dir != translateDir(richtung)) {
 			if ((translateDir(richtung) - dir) < (dir - translateDir(richtung) + 360)) {
 				turn(translateDir(richtung) - dir);
 				dir = translateDir(richtung);
