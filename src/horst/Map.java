@@ -7,14 +7,14 @@ public class Map implements IMap {
 	
 	private List<Mapnode> map;
 	private byte[] position;
-	private byte grš§e;
+	private byte groese;
 	private byte felder;
 	private Richtung richtung;
 
-	public Map (byte felder,byte grš§e){
+	public Map (byte felder,byte groese){
 		map = new ArrayList<Mapnode>();
 		position = new byte[] {0, 0}; //x,y
-		this.grš§e = grš§e;
+		this.groese = groese;
 		this.felder = (byte) (felder-1);
 	}
 	
@@ -30,26 +30,26 @@ public class Map implements IMap {
 		byte y;
 		switch (grad/90) {
 		case 0:
-			x = (byte) (position[0] + Math.floor((distanz*Math.cos(((grad*Math.PI)/180))/grš§e)+0.5));
-			y = (byte) (position[1] - Math.floor((distanz*Math.sin(((grad*Math.PI)/180))/grš§e)+0.5));
+			x = (byte) (position[0] + Math.floor((distanz*Math.cos(((grad*Math.PI)/180))/groese)+0.5));
+			y = (byte) (position[1] - Math.floor((distanz*Math.sin(((grad*Math.PI)/180))/groese)+0.5));
 			return new byte[] {x,y};
 			
 		case 1:
 			grad = grad-90;
-			y = (byte) (position[1] - Math.floor((distanz*Math.cos(((grad*Math.PI)/180))/grš§e)+0.5));
-			x = (byte) (position[0] - Math.floor((distanz*Math.sin(((grad*Math.PI)/180))/grš§e)+0.5));
+			y = (byte) (position[1] - Math.floor((distanz*Math.cos(((grad*Math.PI)/180))/groese)+0.5));
+			x = (byte) (position[0] - Math.floor((distanz*Math.sin(((grad*Math.PI)/180))/groese)+0.5));
 			return new byte[] {x,y};
 			
 		case 2:
 			grad = grad-180;
-			x = (byte) (position[0] - Math.floor((distanz*Math.cos(((grad*Math.PI)/180))/grš§e)+0.5));
-			y = (byte) (position[1] + Math.floor((distanz*Math.sin(((grad*Math.PI)/180))/grš§e)+0.5));
+			x = (byte) (position[0] - Math.floor((distanz*Math.cos(((grad*Math.PI)/180))/groese)+0.5));
+			y = (byte) (position[1] + Math.floor((distanz*Math.sin(((grad*Math.PI)/180))/groese)+0.5));
 			return new byte[] {x,y};
 			
 		case 3:
 			grad = grad-270;
-			y = (byte) (position[1] + Math.floor((distanz*Math.cos(((grad*Math.PI)/180))/grš§e)+0.5));
-			x = (byte) (position[0] + Math.floor((distanz*Math.sin(((grad*Math.PI)/180))/grš§e)+0.5));
+			y = (byte) (position[1] + Math.floor((distanz*Math.cos(((grad*Math.PI)/180))/groese)+0.5));
+			x = (byte) (position[0] + Math.floor((distanz*Math.sin(((grad*Math.PI)/180))/groese)+0.5));
 			return new byte[] {x,y};
 		}
 		return new byte[] {(byte)-1,(byte)-1};
@@ -159,7 +159,7 @@ public class Map implements IMap {
 	}
 	@Override
 	public String toString (){
-		String output = "Apos: "+position[0]+"/"+position[1]+"\nFelder: "+(felder+1)+"\nGroe§e: "+grš§e+"\n";
+		String output = "Apos: "+position[0]+"/"+position[1]+"\nFelder: "+(felder+1)+"\nGroe§e: "+groese+"\n";
 		for (int i=0;i!=map.size();i++){
 			output = output+map.get(i).toString()+"\n";
 		}
