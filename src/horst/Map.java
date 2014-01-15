@@ -2,9 +2,11 @@ package horst;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import lejos.nxt.Button;
-
+/**
+ * 
+ * @author Daniel Kiechle <kiechle.daniel@web.de>
+ *
+ */
 public class Map implements IMap {
 	
 	private List<Mapnode> map;
@@ -29,17 +31,17 @@ public class Map implements IMap {
 	
 	private byte[] getFeld (int grad,int distanz){
 		switch (grad/90) {
-		case 3:
-			return new byte[] {(byte) (position[0] + Math.floor((distanz*Math.cos(((grad*Math.PI)/180))/groese)+0.5)),(byte) (position[1] - Math.floor((distanz*Math.sin(((grad*Math.PI)/180))/groese)+0.5))};
 		case 0:
-			grad = grad-90;
-			return new byte[] {(byte) (position[0] - Math.floor((distanz*Math.sin(((grad*Math.PI)/180))/groese)+0.5)),(byte) (position[1] - Math.floor((distanz*Math.cos(((grad*Math.PI)/180))/groese)+0.5))};
+			return new byte[] {(byte) (position[0] + Math.floor((distanz*Math.sin(((grad*Math.PI)/180))/groese)+0.5)),(byte) (position[1] - Math.floor((distanz*Math.cos(((grad*Math.PI)/180))/groese)+0.5))};
 		case 1:
-			grad = grad-180;
-			return new byte[] {(byte) (position[0] - Math.floor((distanz*Math.cos(((grad*Math.PI)/180))/groese)+0.5)),(byte) (position[1] + Math.floor((distanz*Math.sin(((grad*Math.PI)/180))/groese)+0.5))};
+			grad = grad-90;
+			return new byte[] {(byte) (position[0] + Math.floor((distanz*Math.cos(((grad*Math.PI)/180))/groese)+0.5)),(byte) (position[1] + Math.floor((distanz*Math.sin(((grad*Math.PI)/180))/groese)+0.5))};
 		case 2:
+			grad = grad-180;
+			return new byte[] {(byte) (position[0] - Math.floor((distanz*Math.sin(((grad*Math.PI)/180))/groese)+0.5)),(byte) (position[1] + Math.floor((distanz*Math.cos(((grad*Math.PI)/180))/groese)+0.5))};
+		case 3:
 			grad = grad-270;
-			return new byte[] {(byte) (position[0] + Math.floor((distanz*Math.sin(((grad*Math.PI)/180))/groese)+0.5)),(byte) (position[1] + Math.floor((distanz*Math.cos(((grad*Math.PI)/180))/groese)+0.5))};
+			return new byte[] {(byte) (position[0] - Math.floor((distanz*Math.cos(((grad*Math.PI)/180))/groese)+0.5)),(byte) (position[1] - Math.floor((distanz*Math.sin(((grad*Math.PI)/180))/groese)+0.5))};
 		}
 		return new byte[] {(byte)-1,(byte)-1};
 	}
@@ -90,18 +92,24 @@ public class Map implements IMap {
 
 	@Override
 	public int getSoll(int grad) {
-		byte[] feld;
-		byte t = 0;
-		for(;t!=255;t++){
-			feld = getFeld(grad,t);
-			if(outOfMap(feld[0],feld[1])){
-				if (feld[0]==-1&&feld[1]==-1||feld[0]==(felder+1)&&feld[1]==-1||feld[0]==(felder+1)&&feld[1]==(felder+1)||feld[0]==-1&&feld[1]==(felder+1)) return 255;
-				return (t+(10-t%10)+5);
+		byte[] feld=position;
+		int distanz=0;
+		do{
+			byte[] loop=feld;
+			for(;loop[0]==feld[0]&&loop[1]==feld[1];distanz++){
+				feld=getFeld(grad,distanz);
 			}
-			if(searchMap(feld[0],feld[1])==-1) continue;
-			if(map.get(searchMap(feld[0],feld[1])).getZustand()/10==1||map.get(searchMap(feld[0],feld[1])).getZustand()/10==11) return (t+(10-t%10)+5);
-		}
-		return 255;
+			if (getWall(feld[0],feld[1])){
+				loop=feld;
+				for(;loop[0]==feld[0]&&loop[1]==feld[1];distanz++){
+					feld=getFeld(grad,distanz);
+				}
+				return distanz--;
+			}
+		}while(!outOfMap(feld[0],feld[1]));
+		if (feld[0]==-1&&feld[1]==-1||feld[0]==(felder+1)&&feld[1]==-1||feld[0]==(felder+1)&&feld[1]==(felder+1)||feld[0]==-1&&feld[1]==(felder+1)) return 255;
+		return distanz;
+		
 	}
 	
 	@Override
@@ -168,7 +176,6 @@ public class Map implements IMap {
 	public String toString (){
 		String output = "Apos: "+position[0]+"/"+position[1]+"\nFelder: "+(felder+1)+"\nGroe§e: "+groese+"\n";
 		for (int i=0;i!=map.size();i++){
-			if(i%5==0)Button.waitForPress();
 			output = output+map.get(i).toString()+"\n";
 		}
 		return output;
