@@ -14,6 +14,8 @@ import lejos.nxt.UltrasonicSensor;
 public class Sensoren implements ISensoren {
 	
 	int FEUERERKENNUNGSDIFF = 20;
+	double SOLLTOLERANZ = 0.15;
+	double ABBRECHFEHLERQUOTE = 0.6;
 	ADSensorPort LICHTSENSOR = SensorPort.S1;
 	I2CPort SONICSENSOR = SensorPort.S2;
 	LightSensor LightSens;
@@ -90,6 +92,10 @@ public boolean messen() {
 	int lightMax = 0;
 	int lightDir = 0;
 	int lightMin = 10000;
+	int soll;
+	int ist;
+	int fehler = 0;
+	int total = 0;
 	
 	
 	for (int i=0; i<72; i++){
@@ -101,7 +107,17 @@ public boolean messen() {
 		else if (light < lightMin){
 			lightMin = light;
 		}
-		map.setWall(ausrichtung, SonicSens.getDistance());
+		 soll = map.getSoll(ausrichtung);
+		 ist = SonicSens.getDistance();
+		total++;
+		if (soll > ist * ist + SOLLTOLERANZ){
+			fehler++;
+		}
+		else {
+			map.setWall(ausrichtung,ist );
+		}
+		
+		
 		turn(5 * lastTurn);
 		
 		}
@@ -124,7 +140,10 @@ public boolean messen() {
 			align();
 		}
 		lastTurn = lastTurn * -1;
-		System.out.println("Messung beendet");
+		System.out.println("Fehlerhafte Messwerte: " + fehler/total + "%" );
+		if (fehler/total > ABBRECHFEHLERQUOTE) {
+			return false;
+		}
 		return true;
 	}
 
