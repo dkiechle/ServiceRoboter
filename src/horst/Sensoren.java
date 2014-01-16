@@ -71,7 +71,7 @@ public Sensoren(IMap karte, IBewegung bewegung){
 
 
 @Override
-public boolean messen() {
+public boolean messen() throws InterruptedException {
 
 	System.out.println("starte Messung...");
 	Richtung richtung = map.getPosRi(); // Himmelsrichtung
@@ -99,6 +99,7 @@ public boolean messen() {
 	
 	
 	for (int i=0; i<72; i++){
+		Thread.sleep(50);
 		int light = LightSens.getNormalizedLightValue();
 		if (light > lightMax){
 			lightMax = light;
@@ -111,7 +112,11 @@ public boolean messen() {
 		 ist = SonicSens.getDistance();
 		total++;
 		if (soll > ist * ist + SOLLTOLERANZ){
-			fehler++;
+			Thread.sleep(50);
+			ist = SonicSens.getDistance();
+		}
+		if (soll > ist * ist + SOLLTOLERANZ){
+			ist = SonicSens.getDistance();
 		}
 		else {
 			map.setWall(ausrichtung,ist );
