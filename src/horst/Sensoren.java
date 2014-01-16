@@ -140,7 +140,7 @@ public boolean messen() {
 			align();
 		}
 		lastTurn = lastTurn * -1;
-		System.out.println("Fehlerhafte Messwerte: " + fehler/total + "%" );
+		System.out.println("Fehlerquote: " + fehler/total + "%" );
 		if (fehler/total > ABBRECHFEHLERQUOTE) {
 			return false;
 		}
