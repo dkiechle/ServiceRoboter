@@ -65,26 +65,27 @@ public class Map implements IMap {
 	}
 
 	@Override
-	public void setLight(int grad) {
-		byte[] feld;
+	public void setLight(int grad) { // akktuelle position rausnehmen
+		byte[] feld = getFeld(grad,0);
 		byte t = 0;
+		for(byte[] loop = feld.clone();loop[0]==feld[0]&&loop[1]==feld[1];t++){
+			loop = getFeld(grad,t);
+		}
 		for(;t!=255;t++){
 			feld = getFeld(grad,t);
 			if(outOfMap(feld[0],feld[1]))return;
 			byte loc = searchMap(feld[0],feld[1]);
 			if(loc>-1){
-				if(map.get(loc).getZustand()/10==1||map.get(loc).getZustand()/10==11)return;
 				map.get(loc).setZustand((byte) (map.get(loc).getZustand()+1));
+				if(map.get(loc).getZustand()/10==1||map.get(loc).getZustand()/10==11)return;
 				for(byte[] loop = feld.clone();loop[0]==feld[0]&&loop[1]==feld[1];t++){
 					loop = getFeld(grad,t);
 				}
-				t--;
 			}else{
 				map.add(new Mapnode(feld[0],feld[1],(byte) 1));
 				for(byte[] loop = feld.clone();loop[0]==feld[0]&&loop[1]==feld[1];t++){
 					loop = getFeld(grad,t);
 				}
-				t--;
 			}
 			
 		} 

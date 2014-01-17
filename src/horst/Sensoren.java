@@ -66,6 +66,7 @@ public Sensoren(IMap karte, IBewegung bewegung){
 	SonicSens = new UltrasonicSensor(SONICSENSOR);
 	map = karte;
 	beweg = bewegung;
+	LightSens.setFloodlight(false);
 	}
 
 
@@ -111,11 +112,11 @@ public boolean messen() throws InterruptedException {
 		 soll = map.getSoll(ausrichtung);
 		 ist = SonicSens.getDistance();
 		total++;
-		if (soll > ist * ist + SOLLTOLERANZ){
+		if (soll > ist + ist * SOLLTOLERANZ){ // @Marco  (ist * ist + SOLLTOLERANZ), hat nicht funktioniert
 			Thread.sleep(50);
 			ist = SonicSens.getDistance();
 		}
-		if (soll > ist * ist + SOLLTOLERANZ){
+		if (soll > ist + ist * SOLLTOLERANZ){
 			ist = SonicSens.getDistance();
 		}
 		else {

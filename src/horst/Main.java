@@ -3,6 +3,8 @@
  */
 package horst;
 
+import lejos.nxt.Button;
+
 
 
 /**
@@ -18,13 +20,32 @@ public class Main {
 	 */
 	public static void main(String[] args) {
 		Map map;
-		map = new Map((byte)20,(byte)20);
-		map.setPosition(10, 10);
-		map.setRichtung(Richtung.SOUTH);
-		map.setWall(145, 90);
-		map.setWall(20, 60);
-		map.setLight(93);
+		map = new Map((byte)3,(byte)20);
+		Sensoren sensoren;
+		Bewegungen bewegungen = new Bewegungen(map);
+		map = new Map((byte)3,(byte)20);
+		sensoren = new Sensoren(map,bewegungen);
+		
+		map.setPosition(0, 0);
+		map.setRichtung(Richtung.NORTH);
+		try {
+			sensoren.messen();
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		System.out.println(map.getPosRi());
+		Button.waitForPress();
+		map.setPosition(2,0);
+		try {
+			sensoren.messen();
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		System.out.println(map);
+		Button.waitForPress();
+		
 		
 	}
 
