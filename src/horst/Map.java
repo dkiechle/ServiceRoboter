@@ -3,9 +3,9 @@ package horst;
 import java.util.ArrayList;
 import java.util.List;
 /**
- * 
- * @author Daniel Kiechle <kiechle.daniel@web.de>
- *
+ *Die Klasse Map implementiert alle nštigen Speicher Ressourcen.
+ *@author Daniel Kiechle <kiechle.daniel@web.de>
+ *@version 1.0 
  */
 public class Map implements IMap {
 	
@@ -14,10 +14,19 @@ public class Map implements IMap {
 	private byte groese;
 	private byte felder;
 	private Richtung richtung;
-
+	
+	/**
+	 * Initialisiert die Map.
+     * Aktuelle Position wird auf (0,0) gesetzt und Blickrichtung auf Richtung.NORTH.
+	 * @param felder
+	 * Anzahl der Felder in x oder y Achse
+	 * @param groese
+	 * Grš§e einer Kante eines Feldes in mm
+	 */
 	public Map (byte felder,byte groese){
 		map = new ArrayList<Mapnode>();
 		position = new byte[] {0, 0}; 
+		richtung = Richtung.NORTH;
 		this.groese = groese;
 		this.felder = (byte) (felder-1);
 	}
@@ -52,7 +61,7 @@ public class Map implements IMap {
 	}
 
 	@Override
-	public void setWall(int grad, int distanz) {
+	public void setHinderniss(int grad, int distanz) {
 		byte [] feld = getFeld(grad,distanz);
 		if(outOfMap(feld[0],feld[1]))return;
 		byte loc = searchMap(feld[0],feld[1]);
@@ -65,7 +74,7 @@ public class Map implements IMap {
 	}
 
 	@Override
-	public void setLight(int grad) { // akktuelle position rausnehmen
+	public void setFeuer(int grad) { // akktuelle position rausnehmen
 		byte[] feld = getFeld(grad,0);
 		byte t = 0;
 		for(byte[] loop = feld.clone();loop[0]==feld[0]&&loop[1]==feld[1];t++){
@@ -100,7 +109,7 @@ public class Map implements IMap {
 			for(;loop[0]==feld[0]&&loop[1]==feld[1];distanz++){
 				feld=getFeld(grad,distanz);
 			}
-			if (getWall(feld[0],feld[1])){
+			if (isFree(feld[0],feld[1])){
 				loop=feld;
 				for(;loop[0]==feld[0]&&loop[1]==feld[1];distanz++){
 					feld=getFeld(grad,distanz);
@@ -114,9 +123,10 @@ public class Map implements IMap {
 	}
 	
 	@Override
-	public boolean setPosition(int row, int col) {
-		position[0] = (byte) col;
-		position[1] = (byte) row;
+	public boolean setPosition(int x, int y) {
+		position[0] = (byte) x;
+		position[1] = (byte) y;
+		if(outOfMap((byte)x,(byte)y))return false;
 		byte loc = searchMap (position[0],position[1]);
 		if (loc==-1) map.add(new Mapnode(position[0],position[1],(byte)100));
 		else{
@@ -128,12 +138,12 @@ public class Map implements IMap {
 	}
 
 	@Override
-	public int getPosRow() {
+	public int getPosY() {
 		return position[1];
 	}
 
 	@Override
-	public int getPosCol() {
+	public int getPosX() {
 		return position[0];
 	}
 
@@ -149,7 +159,7 @@ public class Map implements IMap {
 	}
 	
 	@Override
-	public boolean getWall(int x, int y) {
+	public boolean isFree(int x, int y) {
 		byte loc = searchMap((byte)x,(byte)y);
 		if(loc>-1){
 			Mapnode node = map.get(loc);

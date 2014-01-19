@@ -120,7 +120,7 @@ public boolean messen() throws InterruptedException {
 			ist = SonicSens.getDistance();
 		}
 		else {
-			map.setWall(ausrichtung,ist );
+			map.setHinderniss(ausrichtung,ist );
 		}
 		
 		
@@ -141,7 +141,7 @@ public boolean messen() throws InterruptedException {
 				}
 			turn(1);		
 			}
-			map.setLight(lightDir);
+			map.setFeuer(lightDir);
 			System.out.println("LichtMax bei " + lightDir);
 			align();
 		}
