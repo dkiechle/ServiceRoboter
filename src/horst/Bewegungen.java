@@ -5,10 +5,12 @@ import lejos.nxt.Motor;
 public class Bewegungen implements IBewegung {
 
 	final static double RAD_UMFANG = 10.08; // = Raddurchmesser * pi (3,14) 2
-	final static double KETTEN_UMFANG = 59.9; // = Kettenabstand (14,3) * pi 59,5
+	final static double KETTEN_UMFANG = 59.88; // = Kettenabstand (14,3) * pi 59,5
 												// (3,14)
 
 	private short dir;
+	private IMap map;
+	private double turnDifference;
 	private int distanceDone;
 
 	private final short N = 0, E = 90, S = 180, W = 270;
@@ -20,6 +22,7 @@ public class Bewegungen implements IBewegung {
 	 * @param map
 	 */
 	public Bewegungen(IMap map) {
+		this.map = map;
 		dir = translateDir(map.getPosRi());
 		distanceDone = 0;
 		Motor.A.setSpeed(240);
@@ -46,11 +49,12 @@ public class Bewegungen implements IBewegung {
 	 * @param distance
 	 *            in Centimeter anzugeben
 	 */
-	private void forward(double distance) {
+	private boolean forward(double distance) {
 		double faktor = distance / RAD_UMFANG;
 		int grad = (int) (faktor * 360);
 		Motor.A.rotate(grad, true);
 		Motor.B.rotate(grad);
+		return true;
 	}
 
 	/**
@@ -59,12 +63,12 @@ public class Bewegungen implements IBewegung {
 	 * @param distance
 	 *            in Centimeter anzugeben
 	 */
-	private void backward(double distance) {
+	private boolean backward(double distance) {
 		double faktor = distance / RAD_UMFANG;
 		int grad = (int) (faktor * 360);
 		Motor.A.rotate(grad, true);
 		Motor.B.rotate(grad);
-
+		return true;
 	}
 
 	/**
@@ -76,19 +80,40 @@ public class Bewegungen implements IBewegung {
 	 */
 	@Override
 	public boolean turn(double degree) {
-		/*
-		 * Grad 
-		 */
 		double turn_amount = 360 / degree;
 		// Geht von dem Fall aus, dass A sich Links von Fahrtrichtung befindet
 		// und B rechts davon.
 		double distance = KETTEN_UMFANG / turn_amount;
 		double faktor = distance / RAD_UMFANG;
-		int grad = (int) (faktor * 360);
+		turnDifference += (faktor * 360) - Math.round(faktor * 360);
+		int grad = (int)Math.round(faktor * 360);
+		boolean motorStopped = false;
+		while(!motorStopped) {
+			if(!Motor.A.isMoving() && !Motor.B.isMoving()) {
+				motorStopped = true;
+			}
+		}
 		Motor.A.setAcceleration(2000);
 		Motor.B.setAcceleration(2000);
+		if(degree < 10) {
+			Motor.A.setAcceleration(1500);
+			Motor.B.setAcceleration(1500);
+		}
 		Motor.A.rotate((int)-grad,true);
 		Motor.B.rotate((int)grad);
+		if(degree < 10) {
+			try {
+				Thread.sleep(25);
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		if(Math.abs(turnDifference) > 3) {
+			Motor.A.rotate((int)-turnDifference,true);
+			Motor.B.rotate((int)turnDifference);
+			turnDifference = turnDifference - (int) turnDifference;
+		}
 		Motor.A.setAcceleration(6000);
 		Motor.B.setAcceleration(6000);
 		return true;
@@ -117,9 +142,11 @@ public class Bewegungen implements IBewegung {
 	@Override
 	public boolean move(int distance) {
 		if (distance > 0) {
+			distanceDone += distance;
 			forward(distance);
 			return true;
 		} else if (distance < 0) {
+			distanceDone -= distance;
 			backward(distance);
 			return true;
 		} else {
@@ -179,11 +206,12 @@ public class Bewegungen implements IBewegung {
 		Motor.B.rotate(1800);
 	}
 	
-	private boolean isWrong() {
-		return false; 
-	}
-	
 	private void fixWrong()  {
+		/*
+		 * 1. Herausfinden wo Horst ist (laut Map)
+		 * 2. Nachprüfen ob das Stimmen kann (durch Sensoren)
+		 * 3. Bei Abweichung nachbessern (Differenz im Messwert von Sensor ausbessern bis Soll erreicht.
+		 */
 		
 	}
 
