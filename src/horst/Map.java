@@ -104,6 +104,10 @@ public class Map implements IMap {
 	public int getSoll(int grad) {
 		byte[] feld=position;
 		int distanz=0;
+		for(byte[] loop = feld.clone();loop[0]==feld[0]&&loop[1]==feld[1];distanz++){
+			loop = getFeld(grad,distanz);
+		}
+		distanz=0;
 		do{
 			byte[] loop=feld;
 			for(;loop[0]==feld[0]&&loop[1]==feld[1];distanz++){
