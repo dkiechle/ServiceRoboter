@@ -8,10 +8,9 @@ public class Bewegungen implements IBewegung {
 	final static double KETTEN_UMFANG = 59.88; // = Kettenabstand (14,3) * pi 59,5
 												// (3,14)
 
-	private short dir;
+	private int dir;
 	private IMap map;
 	private double turnDifference;
-	private int distanceDone;
 
 	private final short N = 0, E = 90, S = 180, W = 270;
 
@@ -24,7 +23,6 @@ public class Bewegungen implements IBewegung {
 	public Bewegungen(IMap map) {
 		this.map = map;
 		dir = translateDir(map.getPosRi());
-		distanceDone = 0;
 		Motor.A.setSpeed(240);
 		Motor.B.setSpeed(240);
 	}
@@ -80,6 +78,7 @@ public class Bewegungen implements IBewegung {
 	 */
 	@Override
 	public boolean turn(double degree) {
+		dir = (dir + (int)degree)%360;
 		double turn_amount = 360 / degree;
 		// Geht von dem Fall aus, dass A sich Links von Fahrtrichtung befindet
 		// und B rechts davon.
@@ -93,23 +92,16 @@ public class Bewegungen implements IBewegung {
 				motorStopped = true;
 			}
 		}
-		Motor.A.setAcceleration(2000);
-		Motor.B.setAcceleration(2000);
+		Motor.A.setAcceleration(3000);
+		Motor.B.setAcceleration(3000);
 		if(degree < 10) {
-			Motor.A.setAcceleration(1500);
-			Motor.B.setAcceleration(1500);
+			Motor.A.setAcceleration(2400);
+			Motor.B.setAcceleration(2400);
 		}
 		Motor.A.rotate((int)-grad,true);
 		Motor.B.rotate((int)grad);
-		if(degree < 10) {
-			try {
-				Thread.sleep(25);
-			} catch (InterruptedException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-		}
 		if(Math.abs(turnDifference) > 3) {
+			System.out.println(turnDifference);
 			Motor.A.rotate((int)-turnDifference,true);
 			Motor.B.rotate((int)turnDifference);
 			turnDifference = turnDifference - (int) turnDifference;
@@ -142,11 +134,9 @@ public class Bewegungen implements IBewegung {
 	@Override
 	public boolean move(int distance) {
 		if (distance > 0) {
-			distanceDone += distance;
 			forward(distance);
 			return true;
 		} else if (distance < 0) {
-			distanceDone -= distance;
 			backward(distance);
 			return true;
 		} else {
@@ -163,20 +153,26 @@ public class Bewegungen implements IBewegung {
 	@Override
 	public boolean goRichtung(Richtung richtung) {
 		if (dir == translateDir(richtung)) {
-			move(15);
+			move(20);
+			map.setRichtung(richtung);
 		} else if (dir == N || dir == E || dir == S || dir == W) {
 			turn(90);
-			dir += 90 % 360;
 			goRichtung(richtung);
 		} else {
-			if ((translateDir(richtung) - dir) < (dir - translateDir(richtung) + 360)) {
-				turn(translateDir(richtung) - dir);
-				dir = translateDir(richtung);
-			} else {
-				turn(-(dir - translateDir(richtung) + 360));
-				dir = translateDir(richtung);
-			}
+			turn(90-(dir%90));
+			goRichtung(richtung);
 		}
+		// Veralteter Code
+//		else {
+//			if ((translateDir(richtung) - dir) < (dir - translateDir(richtung) + 360)) {
+//				turn(translateDir(richtung) - dir);
+//				dir = translateDir(richtung);
+//			} else {
+//				turn(-(dir - translateDir(richtung) + 360));
+//				dir = translateDir(richtung);
+//			}
+//		}
+
 		return true;
 	}
 
@@ -199,11 +195,6 @@ public class Bewegungen implements IBewegung {
 			}
 		}
 		return true;
-	}
-
-	public void test(double degree) {
-		Motor.A.rotate(1800, true);
-		Motor.B.rotate(1800);
 	}
 	
 	private void fixWrong()  {
