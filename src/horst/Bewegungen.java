@@ -92,16 +92,15 @@ public class Bewegungen implements IBewegung {
 				motorStopped = true;
 			}
 		}
-		Motor.A.setAcceleration(3000);
-		Motor.B.setAcceleration(3000);
+		Motor.A.setAcceleration(2400);
+		Motor.B.setAcceleration(2400);
 		if(degree < 10) {
-			Motor.A.setAcceleration(2400);
-			Motor.B.setAcceleration(2400);
+			Motor.A.setAcceleration(1400);
+			Motor.B.setAcceleration(1400);
 		}
 		Motor.A.rotate((int)-grad,true);
 		Motor.B.rotate((int)grad);
 		if(Math.abs(turnDifference) > 3) {
-			System.out.println(turnDifference);
 			Motor.A.rotate((int)-turnDifference,true);
 			Motor.B.rotate((int)turnDifference);
 			turnDifference = turnDifference - (int) turnDifference;
@@ -119,6 +118,9 @@ public class Bewegungen implements IBewegung {
 	 */
 	@Override
 	public boolean goWay(Richtung[] richtungen) {
+		while(Motor.A.isMoving() || Motor.B.isMoving()) {
+			
+		}
 		for (int i = 0; i < richtungen.length; i++) {
 			goRichtung(richtungen[i]);
 		}
@@ -132,7 +134,7 @@ public class Bewegungen implements IBewegung {
 	 *            Die zu fahrende Distanz in milimeter.
 	 */
 	@Override
-	public boolean move(int distance) {
+	public boolean move(double distance) {
 		if (distance > 0) {
 			forward(distance);
 			return true;
@@ -153,25 +155,22 @@ public class Bewegungen implements IBewegung {
 	@Override
 	public boolean goRichtung(Richtung richtung) {
 		if (dir == translateDir(richtung)) {
-			move(20);
+			move(19.4);
 			map.setRichtung(richtung);
-		} else if (dir == N || dir == E || dir == S || dir == W) {
-			turn(90);
-			goRichtung(richtung);
 		} else {
-			turn(90-(dir%90));
-			goRichtung(richtung);
-		}
+//			if (dir == N || dir == E || dir == S || dir == W) {
+//			turn(90);
+//			goRichtung(richtung); }
 		// Veralteter Code
-//		else {
-//			if ((translateDir(richtung) - dir) < (dir - translateDir(richtung) + 360)) {
-//				turn(translateDir(richtung) - dir);
-//				dir = translateDir(richtung);
-//			} else {
-//				turn(-(dir - translateDir(richtung) + 360));
-//				dir = translateDir(richtung);
-//			}
-//		}
+			if ((translateDir(richtung) - dir) < (dir - translateDir(richtung) + 360)) {
+				turn(translateDir(richtung) - dir);
+				dir = translateDir(richtung);
+			} else {
+				turn(-(dir - translateDir(richtung) + 360));
+				dir = translateDir(richtung);
+			}
+		}
+
 
 		return true;
 	}

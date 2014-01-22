@@ -2,6 +2,8 @@ package horst;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import lejos.nxt.Button;
 /**
  *Die Klasse Map implementiert alle nštigen Speicher Ressourcen.
  *@author Daniel Kiechle <kiechle.daniel@web.de>
@@ -11,7 +13,7 @@ public class Map implements IMap {
 	
 	private List<Mapnode> map;
 	private byte[] position;
-	private byte groese;
+	private double groese;
 	private byte felder;
 	private Richtung richtung;
 	
@@ -23,9 +25,10 @@ public class Map implements IMap {
 	 * @param groese
 	 * Grš§e einer Kante eines Feldes in mm
 	 */
-	public Map (byte felder,byte groese){
+	public Map (byte felder,double groese){
 		map = new ArrayList<Mapnode>();
 		position = new byte[] {0, 0}; 
+		map.add(new Mapnode(position[0],position[1],(byte)100));
 		richtung = Richtung.NORTH;
 		this.groese = groese;
 		this.felder = (byte) (felder-1);
@@ -191,7 +194,8 @@ public class Map implements IMap {
 	public String toString (){
 		String output = "Apos: "+position[0]+"/"+position[1]+"\nFelder: "+(felder+1)+"\nGroe§e: "+groese+"\n";
 		for (int i=0;i!=map.size();i++){
-			output = output+map.get(i).toString()+"\n";
+			if (i%5==0) Button.waitForPress();
+			System.out.println(map.get(i).toString());
 		}
 		return output;
 	}

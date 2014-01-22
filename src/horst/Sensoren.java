@@ -70,33 +70,37 @@ public Sensoren(IMap karte, IBewegung bewegung){
 	}
 
 
+private int translateRichtung(Richtung richtung){
+	Richtung r = richtung ;
+	if (richtung == Richtung.NORTH){
+		return 0;
+	}
+	else if (richtung == Richtung.EAST){
+		return 90;
+	}
+	else if (richtung == Richtung.SOUTH){
+		return  180;
+	}
+	else if (richtung == Richtung.WEST){
+		return 270;
+	}
+	return 0;
+}
 
 @Override
 public boolean messen() throws InterruptedException {
 
 	System.out.println("starte Messung...");
-	Richtung richtung = map.getPosRi(); // Himmelsrichtung
-	if (richtung == Richtung.NORTH){
-		ausrichtung = 0;
-	}
-	else if (richtung == Richtung.EAST){
-		ausrichtung = 90;
-	}
-	else if (richtung == Richtung.SOUTH){
-		ausrichtung = 180;
-	}
-	else if (richtung == Richtung.WEST){
-		ausrichtung = 270;
-	}
-	
+	ausrichtung = translateRichtung(map.getPosRi());
+
 	
 	int lightMax = 0;
 	int lightDir = 0;
 	int lightMin = 10000;
 	int soll;
 	int ist;
-	int fehler = 0;
-	int total = 0;
+	float fehler = 0;
+	float total = 0;
 	
 	
 	for (int i=0; i<72; i++){
@@ -111,17 +115,19 @@ public boolean messen() throws InterruptedException {
 		}
 		 soll = map.getSoll(ausrichtung);
 		 ist = SonicSens.getDistance();
-		total++;
-		if (soll > ist + ist * SOLLTOLERANZ){ // @Marco  (ist * ist + SOLLTOLERANZ), hat nicht funktioniert
-			Thread.sleep(50);
+		 System.out.println("I "+ist+" S: "+soll+"D: "+(soll/ist));
+		total= total + 1;
+		if (soll < ist + ist * SOLLTOLERANZ){ // @Marco  (ist * ist + SOLLTOLERANZ), hat nicht funktioniert
+			Thread.sleep(25);
 			ist = SonicSens.getDistance();
 		}
-		if (soll > ist + ist * SOLLTOLERANZ){
-			ist = SonicSens.getDistance();
-		}
-		else {
+		if (soll >= ist) {
 			map.setHinderniss(ausrichtung,ist );
 		}
+		else {
+		fehler = fehler + 1;	
+		}
+		
 		
 		
 		turn(5 * lastTurn);
@@ -130,7 +136,7 @@ public boolean messen() throws InterruptedException {
 	
 	if (lightMax - lightMin > FEUERERKENNUNGSDIFF) {
 		//feinmessung
-		turn(lightDir- ausrichtung -5);
+		turn(lightDir- ausrichtung -10);
 			lightMax = 0;
 			lightDir = 0;
 		for (int i=0; i<10; i++){
@@ -139,14 +145,15 @@ public boolean messen() throws InterruptedException {
 				lightMax = light;
 				lightDir = ausrichtung;
 				}
-			turn(1);		
+			turn(2);		
 			}
 			map.setFeuer(lightDir);
 			System.out.println("LichtMax bei " + lightDir);
 			align();
 		}
 		lastTurn = lastTurn * -1;
-		System.out.println("Fehlerquote: " + fehler/total + "%" );
+		//System.out.println("Fehlerquote: " + fehler/total + "%" );
+		//System.out.println("ausrichtung: " + ausrichtung );
 		if (fehler/total > ABBRECHFEHLERQUOTE) {
 			return false;
 		}
@@ -155,7 +162,58 @@ public boolean messen() throws InterruptedException {
 
 
 
+	public boolean correct (){
+		
+		int ausrichtung = translateRichtung(map.getPosRi());
+		int closestWall = 0;
+		int closest = 400;
+		Richtung r = Richtung.NORTH;
+		 if (map.getSoll(0) < closest){
+			 closest = map.getSoll(0);
+		 }
+		 if (map.getSoll(90) < closest){
+			 closest = map.getSoll(90);
+			 closestWall = 90;
 
+				 r = Richtung.EAST;
+		 }
+		 if (map.getSoll(180) < closest){
+			 closest = map.getSoll(180);
+			 closestWall = 180;
+
+			 r = Richtung.SOUTH;
+			 
+		 }
+		 if (map.getSoll(270) < closest){
+			 closest = map.getSoll(270);
+			 closestWall = 270;
+
+			 r = Richtung.WEST;
+		 }
+		 
+		turn(closestWall - ausrichtung - 10);
+		int min = 400;
+		int messung = SonicSens.getDistance();
+			for(int i = 0; i < 20; i++){
+				System.out.println("mess: "+ messung +  "min:"+min);
+				if (messung < min){
+					min = messung;
+					closestWall = ausrichtung;
+				}
+				turn(1);
+			}
+			int toTurn = closestWall - ausrichtung;
+			System.out.println("korrektur:" + toTurn + " C:" + closestWall );
+		turn(toTurn);
+		map.setRichtung(r);
+		
+		return true;
+		
+		
+				 
+		
+		
+	}
 
 
 
