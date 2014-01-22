@@ -100,7 +100,7 @@ public class Bewegungen implements IBewegung {
 		}
 		Motor.A.rotate((int)-grad,true);
 		Motor.B.rotate((int)grad);
-		if(Math.abs(turnDifference) > 3) {
+		if(Math.abs(turnDifference) > 1) {
 			Motor.A.rotate((int)-turnDifference,true);
 			Motor.B.rotate((int)turnDifference);
 			turnDifference = turnDifference - (int) turnDifference;
