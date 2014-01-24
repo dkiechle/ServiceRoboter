@@ -155,7 +155,7 @@ public class Bewegungen implements IBewegung {
 	@Override
 	public boolean goRichtung(Richtung richtung) {
 		if (dir == translateDir(richtung)) {
-			move(40);
+			move(20);
 			map.setRichtung(richtung);
 		} else {
 //			if (dir == N || dir == E || dir == S || dir == W) {
@@ -169,7 +169,7 @@ public class Bewegungen implements IBewegung {
 			} else {
 				turn(-(dir - translateDir(richtung) + 360));
 				dir = translateDir(richtung);
-				goRichtung(richtung);
+				goRichtung(richtung);	
 			}
 		}
 
