@@ -39,7 +39,9 @@ public class Main {
 			System.out.println(i);
 		}
 			lokalisierung.stepToFire();
-			
+			if(lokalisierung.isFire())System.out.println("FERTIG");
+			//sensoren.senstest();
+			Button.waitForPress();
 		}
 		
 		

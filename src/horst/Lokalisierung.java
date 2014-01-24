@@ -110,7 +110,7 @@ class Lokalisierung{
 			//change dir
 		}
 		else{
-			Button.waitForPress();
+			
 			Richtung ri[] = new Richtung[d.size()]; 
 			bewegungen.goWay(d.toArray(ri));
 		}
