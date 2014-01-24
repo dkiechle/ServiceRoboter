@@ -20,18 +20,19 @@ public class Main {
 	 */
 	public static void main(String[] args) {
 		Map map;
-		map = new Map((byte)10,(byte)20);
+		map = new Map((byte)5,(byte)40);
 		Sensoren sensoren;
 		Bewegungen bewegungen = new Bewegungen(map);
 		sensoren = new Sensoren(map,bewegungen);
-		map.setPosition(1, 1);
 		try {
 			sensoren.messen();
 		} catch (InterruptedException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		sensoren.correct();
 		Richtung[] rs =  {Richtung.EAST, Richtung.SOUTH};
+		map.setPosition(1, 1);
 		sensoren.correct();
 		bewegungen.goWay(rs);
 		map.setPosition(2,2);

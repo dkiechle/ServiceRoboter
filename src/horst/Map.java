@@ -13,7 +13,7 @@ public class Map implements IMap {
 	
 	private List<Mapnode> map;
 	private byte[] position;
-	private double groese;
+	private byte groese;
 	private byte felder;
 	private Richtung richtung;
 	
@@ -25,7 +25,7 @@ public class Map implements IMap {
 	 * @param groese
 	 * Grš§e einer Kante eines Feldes in mm
 	 */
-	public Map (byte felder,double groese){
+	public Map (byte felder,byte groese){
 		map = new ArrayList<Mapnode>();
 		position = new byte[] {0, 0}; 
 		map.add(new Mapnode(position[0],position[1],(byte)100));
@@ -107,10 +107,6 @@ public class Map implements IMap {
 	public int getSoll(int grad) {
 		byte[] feld=position;
 		int distanz=0;
-		for(byte[] loop = feld.clone();loop[0]==feld[0]&&loop[1]==feld[1];distanz++){
-			loop = getFeld(grad,distanz);
-		}
-		distanz=0;
 		do{
 			byte[] loop=feld;
 			for(;loop[0]==feld[0]&&loop[1]==feld[1];distanz++){
