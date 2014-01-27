@@ -4,9 +4,15 @@ import lejos.nxt.Motor;
 
 public class Bewegungen implements IBewegung {
 
+<<<<<<< HEAD
 	final static double RAD_UMFANG = 10.2; // = Raddurchmesser * pi (3,14) 2
 	final static double KETTEN_UMFANG = 58.95; // = Kettenabstand (14,3) * pi 59,5
 												// (3,14)
+=======
+	final static double RAD_UMFANG = 10.08; // = Raddurchmesser * pi (3,14) 2
+	final static double KETTEN_UMFANG = 59.88; // = Kettenabstand (14,3) * pi 59,5
+												// (3,14) 
+>>>>>>> 82c7cbb99f9f1369716d211c1100210b0b4c88f0
 
 	private int dir;
 	private IMap map;
@@ -155,7 +161,7 @@ public class Bewegungen implements IBewegung {
 	@Override
 	public boolean goRichtung(Richtung richtung) {
 		if (dir == translateDir(richtung)) {
-			move(20);
+			move(19.4);
 			map.setRichtung(richtung);
 		} else {
 //			if (dir == N || dir == E || dir == S || dir == W) {
