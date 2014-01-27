@@ -25,28 +25,22 @@ public class Main {
 		Bewegungen bewegungen = new Bewegungen(map);
 		sensoren = new Sensoren(map,bewegungen);
 		map.setPosition(1, 1);
-		try {
-			sensoren.messen();
-		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+		
+		try{
+			for(int i = 0;i<90;i++) {
+		bewegungen.turn(1);
+			}
+		Thread.sleep(200);
+		for(int i = 0;i<45;i++) {
+			bewegungen.turn(2);
 		}
-		Richtung[] rs =  {Richtung.EAST, Richtung.SOUTH};
-		sensoren.correct();
-		bewegungen.goWay(rs);
-		map.setPosition(2,2);
-		try {
-			sensoren.messen();
-		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+		Thread.sleep(200);
+		for(int i = 0;i<360;i++) {
+			bewegungen.turn(-1);
 		}
-		Richtung[] rs2 = {Richtung.EAST, Richtung.EAST, Richtung.SOUTH, Richtung.WEST};
-		sensoren.correct();
-		bewegungen.goWay(rs2);
-
-
-
+		} catch(Exception e){}
+		
+		
 //		try {
 //			sensoren.messen();
 //		} catch (InterruptedException e) {
