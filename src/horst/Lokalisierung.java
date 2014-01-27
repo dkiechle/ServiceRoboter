@@ -61,6 +61,7 @@ class Lokalisierung{
 				return false;
 			}
 		}
+		if(mF>2){System.out.println("x="+mX+" y="+mY);}
 		return (mF>2);
 	}
 	/**
@@ -93,6 +94,7 @@ class Lokalisierung{
 			
 			case SOUTH:
 				x=Math.min(((map.getPosY()+map.getlength())/2),getDistance(dir));
+				
 				if (x==0){dir=changeDir(dir);nextStep();return;}
 				for (byte i=0; i<x;i++){
 					w.add(dir);
@@ -101,12 +103,14 @@ class Lokalisierung{
 				return;
 			
 			case WEST:
+				if(map.getPosX()==0){dir=changeDir(dir);nextStep();return;}
 				if (!map.isFree(map.getPosX()-1,map.getPosY())){dir=changeDir(dir);nextStep();return;}
 				w.add(dir);
 				goWay(w);
 				return;
 			
 			case NORTH:
+				if(map.getPosY()==0){dir=changeDir(dir);nextStep();return;}
 				if (!map.isFree(map.getPosX(),map.getPosY()-1)){dir=changeDir(dir);nextStep();return;}
 				w.add(dir);
 				goWay(w);
