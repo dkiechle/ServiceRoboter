@@ -85,6 +85,7 @@ class Lokalisierung{
 					//@toDo: maximum==0 testen, mit go Way
 			case EAST:
 				x=Math.min(((map.getPosX()+map.getlength())/2),getDistance(dir));
+				if(map.getPosX()==(map.getlength()+1)/*+1 ?*/){dir=changeDir(dir);nextStep();return;}
 				if (x==0){dir=changeDir(dir);nextStep();return;}
 				for (byte i=0; i<x;i++){
 					w.add(dir);
@@ -94,7 +95,7 @@ class Lokalisierung{
 			
 			case SOUTH:
 				x=Math.min(((map.getPosY()+map.getlength())/2),getDistance(dir));
-				
+				if(map.getPosY()==(map.getlength()+1)){dir=changeDir(dir);nextStep();return;}
 				if (x==0){dir=changeDir(dir);nextStep();return;}
 				for (byte i=0; i<x;i++){
 					w.add(dir);
