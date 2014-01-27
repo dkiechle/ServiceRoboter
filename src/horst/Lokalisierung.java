@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import lejos.nxt.Button;
 
 class Lokalisierung{
+	private Richtung dir;
 	private ArrayList<Koordinaten> coords;
 	private byte mX=-1;
 	private byte mY=-1;
@@ -14,16 +15,17 @@ class Lokalisierung{
 	public Lokalisierung(Map map,Bewegungen bewegungen) {
 		this.map = map;
 		this.bewegungen = bewegungen;
+		dir = map.getPosRi();
 	}
 	
-	byte getDistance(){	// dist to next Wall in current Dir
-		if (map.getPosRi()==Richtung.EAST){
+	byte getDistance(Richtung d){	// dist to next Wall in current Dir
+		if (d==Richtung.EAST){
 			for (byte i=1; i < (map.getlength()-map.getPosX()); i++){
 				Koordinaten coord=new Koordinaten(i, (byte)map.getPosY());
 				if (map.isFree(map.getPosX()+i,map.getPosY())||coords.contains(coord)){	return (byte)(i-1);}
 			}
 		}
-		if (map.getPosRi()==Richtung.SOUTH){
+		if (d==Richtung.SOUTH){
 			for (byte i=1; i < (map.getlength()-map.getPosY()); i++){
 				Koordinaten coord=new Koordinaten((byte)map.getPosY(),i);
 				if (map.isFree(map.getPosX(),map.getPosY()+i)||coords.contains(coord)){	return (byte)(i-1);}
@@ -35,6 +37,7 @@ class Lokalisierung{
 	 * @return true, if fire can be located from existing scans
 	 */
 	boolean isFire(){
+		dir =map.getPosRi();
 		byte mF=1;
 		coords=new ArrayList<Koordinaten>();
 		for (byte x=0; x<map.getlength();x++){
@@ -64,7 +67,6 @@ class Lokalisierung{
 	 * Moves the robot to the next location for scanning.
 	 */
 	void nextStep(){
-		Richtung dir = map.getPosRi();
 		int x=0;
 		ArrayList<Richtung> w = new ArrayList<Richtung>();
 		// dir==South
@@ -81,44 +83,40 @@ class Lokalisierung{
 		switch(dir){
 					//@toDo: maximum==0 testen, mit go Way
 			case EAST:
-				x=Math.min(((map.getPosX()+map.getlength())/2),getDistance());
+				x=Math.min(((map.getPosX()+map.getlength())/2),getDistance(dir));
+				if (x==0){dir=changeDir(dir);nextStep();return;}
 				for (byte i=0; i<x;i++){
-					w.add(Richtung.EAST);
+					w.add(dir);
 				}
 				goWay(w);
 				return;
 			
 			case SOUTH:
-				x=Math.min(((map.getPosY()+map.getlength())/2),getDistance());
+				x=Math.min(((map.getPosY()+map.getlength())/2),getDistance(dir));
+				if (x==0){dir=changeDir(dir);nextStep();return;}
 				for (byte i=0; i<x;i++){
-					w.add(Richtung.SOUTH);
+					w.add(dir);
 				}
-			goWay(w);
+				goWay(w);
 				return;
 			
 			case WEST:
-				if (getDistance()!=0){
-				w.add(Richtung.WEST);}
+				if (x==0){dir=changeDir(dir);nextStep();return;}
+				w.add(dir);
 				goWay(w);
 				return;
 			
 			case NORTH:
-				if (getDistance()!=0){
-				w.add(Richtung.NORTH);}
+				if (x==0){dir=changeDir(dir);nextStep();return;}
+				w.add(dir);
 				goWay(w);
 				return;
 			
 		}
 	}
 	void goWay(ArrayList<Richtung> d){
-		if (d.size()==0){
-			d.add(0, changeDir(map.getPosRi()));
-		}
-		else{
-			
 			Richtung ri[] = new Richtung[d.size()]; 
 			bewegungen.goWay(d.toArray(ri));
-		}
 	}
 	private Richtung changeDir(Richtung d){
 		switch (d){
