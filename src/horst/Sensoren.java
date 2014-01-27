@@ -87,6 +87,21 @@ private int translateRichtung(Richtung richtung){
 	return 0;
 }
 
+public void senstest(){
+	while(true){
+		System.out.println(LightSens.getNormalizedLightValue());
+		try {
+			Thread.sleep(50);
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+	}
+	
+}
+
+
 @Override
 public boolean messen() throws InterruptedException {
 
@@ -108,6 +123,9 @@ public boolean messen() throws InterruptedException {
 		int light = LightSens.getNormalizedLightValue();
 		if (light > lightMax){
 			lightMax = light;
+			LightSens.setFloodlight(true);
+			Thread.sleep(100);
+			LightSens.setFloodlight(false);
 			lightDir = ausrichtung;
 			}
 		else if (light < lightMin){
@@ -147,7 +165,7 @@ public boolean messen() throws InterruptedException {
 				}
 			turn(2);		
 			}
-			map.setFeuer(lightDir);
+			map.setFeuer(((lightDir-10)+360)%360);
 			System.out.println("LichtMax bei " + lightDir);
 			align();
 		}

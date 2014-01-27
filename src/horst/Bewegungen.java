@@ -165,9 +165,11 @@ public class Bewegungen implements IBewegung {
 			if ((translateDir(richtung) - dir) < (dir - translateDir(richtung) + 360)) {
 				turn(translateDir(richtung) - dir);
 				dir = translateDir(richtung);
+				goRichtung(richtung);
 			} else {
 				turn(-(dir - translateDir(richtung) + 360));
 				dir = translateDir(richtung);
+				goRichtung(richtung);	
 			}
 		}
 
