@@ -28,7 +28,7 @@ public class Main {
 		sensoren = new Sensoren(map,bewegungen);
 		lokalisierung = new Lokalisierung(map,bewegungen);
 		
-		for(int i = 0;!lokalisierung.isFire();i++){
+		/*for(int i = 0;!lokalisierung.isFire();i++){
 			try {
 				sensoren.messen();
 			} catch (InterruptedException e) {
@@ -41,7 +41,12 @@ public class Main {
 			lokalisierung.stepToFire();
 			if(lokalisierung.isFire())System.out.println("FERTIG");
 			//sensoren.senstest();
-			Button.waitForPress();
+			*/
+		
+			bewegungen.move(8);
+			bewegungen.move(-10);
+			//bewegungen.turn(1800);
+			//Button.waitForPress();
 		}
 		
 		

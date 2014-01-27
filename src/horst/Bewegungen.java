@@ -5,7 +5,7 @@ import lejos.nxt.Motor;
 public class Bewegungen implements IBewegung {
 
 	final static double RAD_UMFANG = 10.2; // = Raddurchmesser * pi (3,14) 2
-	final static double KETTEN_UMFANG = 61.535; // = Kettenabstand (14,3) * pi 59,5
+	final static double KETTEN_UMFANG = 58.95; // = Kettenabstand (14,3) * pi 59,5
 												// (3,14)
 
 	private int dir;
