@@ -41,12 +41,13 @@ public class Main {
 			lokalisierung.stepToFire();
 			if(lokalisierung.isFire())System.out.println("FERTIG");
 			//sensoren.senstest();
-			*/
 		
-			bewegungen.move(8);
-			bewegungen.move(-10);
-			//bewegungen.turn(1800);
-			//Button.waitForPress();
+		*/
+			//bewegungen.move(8);
+			//bewegungen.move(-10);
+			bewegungen.turn(90);
+			System.out.println(map);
+			Button.waitForPress();
 		}
 		
 		
