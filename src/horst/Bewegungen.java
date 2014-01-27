@@ -6,7 +6,7 @@ public class Bewegungen implements IBewegung {
 
 	final static double RAD_UMFANG = 10.08; // = Raddurchmesser * pi (3,14) 2
 	final static double KETTEN_UMFANG = 59.88; // = Kettenabstand (14,3) * pi 59,5
-												// (3,14)
+												// (3,14) 
 
 	private int dir;
 	private IMap map;
