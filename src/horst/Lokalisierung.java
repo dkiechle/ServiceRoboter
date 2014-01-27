@@ -101,13 +101,13 @@ class Lokalisierung{
 				return;
 			
 			case WEST:
-				if (x==0){dir=changeDir(dir);nextStep();return;}
+				if (!map.isFree(map.getPosX()-1,map.getPosY())){dir=changeDir(dir);nextStep();return;}
 				w.add(dir);
 				goWay(w);
 				return;
 			
 			case NORTH:
-				if (x==0){dir=changeDir(dir);nextStep();return;}
+				if (!map.isFree(map.getPosX(),map.getPosY()-1)){dir=changeDir(dir);nextStep();return;}
 				w.add(dir);
 				goWay(w);
 				return;
