@@ -14,6 +14,7 @@ import lejos.nxt.UltrasonicSensor;
 public class Sensoren implements ISensoren {
 	
 	int FEUERERKENNUNGSDIFF = 20;
+	int LICHTSENSOROFFSET = -15;
 	double SOLLTOLERANZ = 0.15;
 	double ABBRECHFEHLERQUOTE = 0.6;
 	ADSensorPort LICHTSENSOR = SensorPort.S1;
@@ -25,6 +26,58 @@ public class Sensoren implements ISensoren {
 	int ausrichtung = 0;
 	int lastTurn = 1;
 
+	
+	public boolean turnToMax(){
+
+		int lightMax = 0;
+		int lightDir = 0;
+		int lightMin = 10000;
+
+		ausrichtung = 0;
+		for (int i=0; i<72; i++){
+			try {
+				Thread.sleep(10);
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
+			int light = LightSens.getNormalizedLightValue();
+			if (light > lightMax){
+				lightMax = light;
+				lightDir = ausrichtung;
+				}
+			else if (light < lightMin){
+				lightMin = light;
+				}
+	
+			turn(5);
+			
+			}
+		
+	
+			turn(lightDir - ausrichtung -10);
+				lightMax = 0;
+				lightDir = 0;
+			for (int i=0; i<10; i++){
+				int light = LightSens.getNormalizedLightValue();
+				if (light > lightMax){
+					lightMax = light;
+					lightDir = ausrichtung;
+					}
+				turn(2);		
+				}
+			
+			turn(lightDir - ausrichtung +LICHTSENSOROFFSET);
+			
+			if (lightMax - lightMin < FEUERERKENNUNGSDIFF){
+				return false;
+			}
+		return true;
+	}
+	
+	public int getDistance(){
+		return SonicSens.getDistance();
+	}
+	
 	private void turn(int degree){
 		if (degree > 180){
 			degree = (-360+ degree);
