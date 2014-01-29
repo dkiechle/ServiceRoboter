@@ -39,7 +39,7 @@ public class Main {
 			}
 			distance = sensoren.getDistance();
 
-			while (distance < 25 && !(distance < 200)) {
+			while (distance < 25 ||(distance > 200)) {
 				bewegungen.turn(90);
 				distance = sensoren.getDistance();
 
