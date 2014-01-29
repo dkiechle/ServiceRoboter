@@ -39,12 +39,6 @@ public class Main {
 			}
 			distance = sensoren.getDistance();
 
-			while (distance < 25 ||(distance > 200)) {
-				bewegungen.turn(90);
-				distance = sensoren.getDistance();
-
-			}
-
 			double distToDrive = ((distance / 3) * 2);
 
 			bewegungen.move(Math.max(distToDrive, 25));
