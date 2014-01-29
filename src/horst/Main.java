@@ -30,7 +30,7 @@ public class Main {
 		sensoren = new Sensoren(map,bewegungen);
 		lokalisierung = new Lokalisierung(map,bewegungen);
 		
-		for(int i = 0;!lokalisierung.isFire();i++){
+		/*for(int i = 0;!lokalisierung.isFire();i++){
 			try {
 				sensoren.messen();
 			} catch (InterruptedException e) {
@@ -45,7 +45,8 @@ public class Main {
 			//sensoren.senstest();
 
 			Button.waitForPress();
-			
+			System.out.println();
+			*/
 			//LÖSCHEN
 			int abortCount = 0;
 			int distance;
@@ -57,17 +58,26 @@ public class Main {
 				else {
 					abortCount = 0;
 				}
+				if (abortCount == 3){
+					bewegungen.turn(30 + Math.random()*100);
+				}
 				distance = sensoren.getDistance();
 				
-				while(distance <25){
-					bewegungen.turn(45);
+				while(distance <25 && !(distance<200)){
+					bewegungen.turn(90);
 					distance = sensoren.getDistance();
 					
 				}
-					bewegungen.move(Math.max(distance/2,20));
-					bewegungen.move(-10);
 				
+					double distToDrive = ((distance/3)*2);
+					
+					
+					bewegungen.move(Math.max(distToDrive,25));
+					bewegungen.move(-7);
+				
+					
 			}
+			Button.waitForPress();
 		}
 	
 	

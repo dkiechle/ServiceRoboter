@@ -13,8 +13,8 @@ import lejos.nxt.UltrasonicSensor;
  */
 public class Sensoren implements ISensoren {
 	
-	int FEUERERKENNUNGSDIFF = 20;
-	int LICHTSENSOROFFSET = -15;
+	int FEUERERKENNUNGSDIFF = 25;
+	int LICHTSENSOROFFSET = -13;
 	double SOLLTOLERANZ = 0.15;
 	double ABBRECHFEHLERQUOTE = 0.6;
 	ADSensorPort LICHTSENSOR = SensorPort.S1;
@@ -67,7 +67,7 @@ public class Sensoren implements ISensoren {
 				}
 			
 			turn(lightDir - ausrichtung +LICHTSENSOROFFSET);
-			
+			System.out.println("LDIFF: " +(lightMax-lightMin));
 			if (lightMax - lightMin < FEUERERKENNUNGSDIFF){
 				return false;
 			}

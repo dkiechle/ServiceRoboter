@@ -10,6 +10,7 @@ public class Bewegungen implements IBewegung {
 
 	private int dir;
 	private IMap map;
+	private Sensoren sensor;
 	private double turnDifference;
 
 	private final short N = 0, E = 90, S = 180, W = 270;
@@ -23,8 +24,8 @@ public class Bewegungen implements IBewegung {
 	public Bewegungen(IMap map) {
 		this.map = map;
 		dir = translateDir(map.getPosRi());
-		Motor.A.setSpeed(240);
-		Motor.B.setSpeed(240);
+		Motor.A.setSpeed(300);
+		Motor.B.setSpeed(300);
 	}
 
 	private short translateDir(Richtung r) {
@@ -92,12 +93,14 @@ public class Bewegungen implements IBewegung {
 				motorStopped = true;
 			}
 		}
-		Motor.A.setAcceleration(2400);
-		Motor.B.setAcceleration(2400);
+		Motor.A.setAcceleration(2800);
+		Motor.B.setAcceleration(2800);
+		/* Veraltet
 		if(degree < 10) {
 			Motor.A.setAcceleration(1400);
 			Motor.B.setAcceleration(1400);
 		}
+		*/
 		Motor.A.rotate((int)-grad,true);
 		Motor.B.rotate((int)grad);
 		if(Math.abs(turnDifference) > 1) {
@@ -135,15 +138,14 @@ public class Bewegungen implements IBewegung {
 	 */
 	@Override
 	public boolean move(double distance) {
-		if (distance > 0) {
-			forward(distance);
-			return true;
-		} else if (distance < 0) {
-			backward(distance);
-			return true;
-		} else {
-			return false;
+		for(double section = distance/10;section!=distance&&(sensor.getDistance()>15);section = section+distance/10){
+			if (distance > 0) {
+				forward(distance);
+			} else if (distance < 0) {
+				backward(distance);
+			}
 		}
+		return true;
 	}
 
 	/**
