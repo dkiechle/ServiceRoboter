@@ -13,6 +13,7 @@ import lejos.nxt.UltrasonicSensor;
  */
 public class Sensoren implements ISensoren {
 	
+	
 	int FEUERERKENNUNGSDIFF = 25;
 	int LICHTSENSOROFFSET = -13;
 	double SOLLTOLERANZ = 0.15;

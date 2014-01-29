@@ -26,6 +26,11 @@ public class Bewegungen implements IBewegung {
 		dir = translateDir(map.getPosRi());
 		Motor.A.setSpeed(300);
 		Motor.B.setSpeed(300);
+		
+	}
+	
+	public void setSensor(Sensoren send) {
+		sensor = send;
 	}
 
 	private short translateDir(Richtung r) {
@@ -138,11 +143,11 @@ public class Bewegungen implements IBewegung {
 	 */
 	@Override
 	public boolean move(double distance) {
-		for(double section = distance/10;section!=distance&&(sensor.getDistance()>15);section = section+distance/10){
+		for(double section = distance/10;section<distance&&(sensor.getDistance()>15);section = section+distance/10){
 			if (distance > 0) {
-				forward(distance);
+				forward(section);
 			} else if (distance < 0) {
-				backward(distance);
+				backward(section);
 			}
 		}
 		return true;

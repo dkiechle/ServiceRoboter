@@ -28,6 +28,7 @@ public class Main {
 		map = new Map((byte)10,(byte)20);
 		bewegungen = new Bewegungen(map);
 		sensoren = new Sensoren(map,bewegungen);
+		bewegungen.setSensor(sensoren);
 		lokalisierung = new Lokalisierung(map,bewegungen);
 		
 		/*for(int i = 0;!lokalisierung.isFire();i++){
