@@ -143,13 +143,18 @@ public class Bewegungen implements IBewegung {
 	 */
 	@Override
 	public boolean move(double distance) {
-		for(double section = distance/10;section<distance&&(sensor.getDistance()>15);section = section+distance/10){
+		double section = distance / 10;
+		double section2 = section;
+		
 			if (distance > 0) {
-				forward(section);
+				for(;section<distance&&(sensor.getDistance()>18);section+= distance/10){
+					forward(section2);
+				
+				}
 			} else if (distance < 0) {
-				backward(section);
+				backward(distance);
 			}
-		}
+		
 		return true;
 	}
 

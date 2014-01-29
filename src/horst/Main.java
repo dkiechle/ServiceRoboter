@@ -4,6 +4,7 @@
 package horst;
 
 import lejos.nxt.Button;
+import lejos.nxt.Sound;
 
 
 
@@ -30,6 +31,8 @@ public class Main {
 		sensoren = new Sensoren(map,bewegungen);
 		bewegungen.setSensor(sensoren);
 		lokalisierung = new Lokalisierung(map,bewegungen);
+		
+		Sound.playTone(660, 245);
 		
 		/*for(int i = 0;!lokalisierung.isFire();i++){
 			try {
@@ -74,7 +77,7 @@ public class Main {
 					
 					
 					bewegungen.move(Math.max(distToDrive,25));
-					bewegungen.move(-7);
+					bewegungen.move(-8);
 				
 					
 			}
