@@ -5,13 +5,11 @@ import lejos.nxt.Motor;
 public class Bewegungen implements IBewegung {
 
 	final static double RAD_UMFANG = 10.2; // = Raddurchmesser * pi (3,14) 2
-	final static double KETTEN_UMFANG = 62.33; // = Kettenabstand (14,3) * pi 59,5
-
-
+	final static double KETTEN_UMFANG = 62.33; // = Kettenabstand (14,3) * pi
+												// 59,5
 
 	private Sensoren sensor;
 	private double turnDifference;
-
 
 	/**
 	 * Initiert die Bewegungsklasse und setzt die Geschwindigkeit auf ein
@@ -23,9 +21,14 @@ public class Bewegungen implements IBewegung {
 
 		Motor.A.setSpeed(300);
 		Motor.B.setSpeed(300);
-		
+
 	}
-	
+
+	/**
+	 * Für den funktionierenden Ablauf wird die Sensorenklasse benötigt, diese wird hiermit gesetzt.
+	 * 
+	 * @param send 
+	 */
 	public void setSensor(Sensoren send) {
 		sensor = send;
 	}
@@ -73,21 +76,21 @@ public class Bewegungen implements IBewegung {
 		double distance = KETTEN_UMFANG / turn_amount;
 		double faktor = distance / RAD_UMFANG;
 		turnDifference += (faktor * 360) - Math.round(faktor * 360);
-		int grad = (int)Math.round(faktor * 360);
+		int grad = (int) Math.round(faktor * 360);
 		boolean motorStopped = false;
-		while(!motorStopped) {
-			if(!Motor.A.isMoving() && !Motor.B.isMoving()) {
+		while (!motorStopped) {
+			if (!Motor.A.isMoving() && !Motor.B.isMoving()) {
 				motorStopped = true;
 			}
 		}
 		Motor.A.setAcceleration(2800);
 		Motor.B.setAcceleration(2800);
-		
-		Motor.A.rotate((int)-grad,true);
-		Motor.B.rotate((int)grad);
-		if(Math.abs(turnDifference) > 1) {
-			Motor.A.rotate((int)-turnDifference,true);
-			Motor.B.rotate((int)turnDifference);
+
+		Motor.A.rotate((int) -grad, true);
+		Motor.B.rotate((int) grad);
+		if (Math.abs(turnDifference) > 1) {
+			Motor.A.rotate((int) -turnDifference, true);
+			Motor.B.rotate((int) turnDifference);
 			turnDifference = turnDifference - (int) turnDifference;
 		}
 		Motor.A.setAcceleration(6000);
@@ -96,7 +99,9 @@ public class Bewegungen implements IBewegung {
 	}
 
 	/**
-	 * Bewegung ohne Rotation nach vorne oder nach hinten.
+	 * Bewegung ohne Rotation nach vorne oder nach hinten. Die Distanz wird in
+	 * 10tel geteilt und abgefahren, wird dabei ein Hinderniss in Fahrtirichtung
+	 * gemessen, wird der Bewegungsablauf unterbrochen.
 	 * 
 	 * @param distance
 	 *            Die zu fahrende Distanz in milimeter.
@@ -105,16 +110,16 @@ public class Bewegungen implements IBewegung {
 	public boolean move(double distance) {
 		double section = distance / 10;
 		double section2 = section;
-		
-			if (distance > 0) {
-				for(;section<distance&&(sensor.getDistance()>18);section+= distance/10){
-					forward(section2);
-				
-				}
-			} else if (distance < 0) {
-				backward(distance);
+
+		if (distance > 0) {
+			for (; section < distance && (sensor.getDistance() > 18); section += distance / 10) {
+				forward(section2);
+
 			}
-		
+		} else if (distance < 0) {
+			backward(distance);
+		}
+
 		return true;
 	}
 }
