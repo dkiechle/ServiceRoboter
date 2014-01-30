@@ -12,8 +12,11 @@ import lejos.nxt.Button;
 public class Main {
 
 	/**
-	 * @param args
-	 * @return
+	 * @author Marco Höppner
+	 * 
+	 * Der Hauptalgorithmus.
+	 * Sucht Das Lichtmaxima und nähert sich diesem, während Hindernissen ausgewichen wird.
+	 * Löscht solange Teelichter, bis keine zu großen Lichtunterschiede mehr erkennbar sind.
 	 */
 
 	public static void main(String[] args) {

@@ -22,6 +22,12 @@ public class Sensoren implements ISensoren {
 	IBewegung beweg;
 	int ausrichtung = 0;
 
+	/**
+	 * dreht den Roboter zum Lichtmaximum.
+	 * @return false, wenn Differenz zwischen Minimum und Maximum kleiner als die Feuererkunngsdifferent (25) ist. sonst true.
+	 * 
+	 * 
+	 */
 	public boolean turnToMax() {
 
 		int lightMax = 0;
@@ -67,6 +73,10 @@ public class Sensoren implements ISensoren {
 		return true;
 	}
 
+	/**
+	 * gibt Distanz zum nächsten Hinderness zurück
+	 * @return Distanz zum nächsten Hinderniss
+	 */
 	public int getDistance() {
 		return SonicSens.getDistance();
 	}
