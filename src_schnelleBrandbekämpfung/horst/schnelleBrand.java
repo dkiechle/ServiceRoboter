@@ -9,7 +9,7 @@ import lejos.nxt.Button;
  * @author Daniel Kiechle
  * 
  */
-public class schnelleBrandbekämpfung {
+public class schnelleBrand {
 
 	/**
 	 * @author Marco Höppner

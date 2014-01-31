@@ -125,7 +125,7 @@ public Sensoren(IMap karte, IBewegung bewegung){
 
 
 private int translateRichtung(Richtung richtung){
-	Richtung r = richtung ;
+
 	if (richtung == Richtung.NORTH){
 		return 0;
 	}
