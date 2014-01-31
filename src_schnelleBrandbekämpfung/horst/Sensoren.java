@@ -24,7 +24,9 @@ public class Sensoren implements ISensoren {
 
 	/**
 	 * dreht den Roboter zum Lichtmaximum.
-	 * @return false, wenn Differenz zwischen Minimum und Maximum kleiner als die Feuererkunngsdifferent (25) ist. sonst true.
+	 * 
+	 * @return false, wenn Differenz zwischen Minimum und Maximum kleiner als
+	 *         die Feuererkunngsdifferent (25) ist. sonst true.
 	 * 
 	 * 
 	 */
@@ -75,6 +77,7 @@ public class Sensoren implements ISensoren {
 
 	/**
 	 * gibt Distanz zum nächsten Hinderness zurück
+	 * 
 	 * @return Distanz zum nächsten Hinderniss
 	 */
 	public int getDistance() {

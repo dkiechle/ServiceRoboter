@@ -1,8 +1,7 @@
 package horst;
 
 public interface ISensoren {
-	
-	public boolean messen () throws InterruptedException;
-	
-	
+
+	public boolean messen() throws InterruptedException;
+
 }

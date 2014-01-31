@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
-	<classpathentry kind="src" path="src_schnelleBrandbekämpfung"/>
+	<classpathentry kind="src" path="src_brandbekämpfungMitErkundung"/>
 	<classpathentry kind="con" path="org.lejos.nxt.ldt.LEJOS_LIBRARY_CONTAINER/nxt"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

@@ -25,9 +25,10 @@ public class Bewegungen implements IBewegung {
 	}
 
 	/**
-	 * Für den funktionierenden Ablauf wird die Sensorenklasse benötigt, diese wird hiermit gesetzt.
+	 * Für den funktionierenden Ablauf wird die Sensorenklasse benötigt, diese
+	 * wird hiermit gesetzt.
 	 * 
-	 * @param send 
+	 * @param send
 	 */
 	public void setSensor(Sensoren send) {
 		sensor = send;
