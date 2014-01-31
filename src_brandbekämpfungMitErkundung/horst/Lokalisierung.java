@@ -139,8 +139,60 @@ class Lokalisierung{
 	 * Only called if isFire==true. Moves the robot towards fire.
 	 */
 	void stepToFire(){
-		//Dir[] d = findWay(mX,mY)
+	Koordinaten start=new Koordinaten(map.getPosX(),map.getPosY());
+	Koordinaten ziel=new Koordinaten(mX,mY);
+	ArrayList<Richtung> dirs = new ArrayList<Richtung>;
+	if (generatePath(start, ziel, dirs)){// Copy to Array and reverse
+		Richtung[] d = new Richtung[dirs.size()];
+		int j=0;
+		for (int i=dirs.size()-1; i>=0; i--){
+			d[j]=dirs.get(i);
+			j++;
+		}
+		goWay(d);
 	}
+}
+	/**
+	 * Recursively finds a path for the robot and returns an ArrayList with the reverse way.
+	 * @param from the starting point
+	 * @param to destination of the robot
+	 * @param dirs empty ArrayList to hold the path (in reverse)
+	 * @return Whether a path could be found or not.
+	 */
+	private boolean generatePath(Koordinaten from, Koordinaten to, ArrayList<Richtung> dirs){
+	if (from.equals(to)){return true;}//Eintraege erstellen
+	else if (from.getX()==to.getX()){// nur noch nach unten
+		if (map.isWall(from.getX(),from.getY()+1)){//Wand==true
+			return false;
+		}
+		if (getPath(new Koordinaten(from.getX(),from.getY()+1),to,dirs)){
+			dirs.add(Richtung.SOUTH);
+			return true;
+		}
+	}
+	else if(from.getY()==to.getY()){//nur noch nach rechts
+		if (map.isWall(from.getX+1(),from.getY())){//Wand==true
+			return false;
+		}
+		if (getPath(new Koordinaten(from.getX()+1,from.getY()),to,dirs)){
+			dirs.add(Richtung.EAST);
+			return true;
+		}
+	}
+	else {// beide moeglich
+		if (getPath(new Koordinaten(from.getX(),from.getY()+1),to,dirs)){
+			dirs.add(Richtung.SOUTH);
+			return true;
+		}
+		if (getPath(new Koordinaten(from.getX()+1,from.getY()),to,dirs)){
+			dirs.add(Richtung.EAST);
+			return true;
+		}
+		return false;//keiner von beiden frei
+	}
+}
+	}
+	
 }
 class Koordinaten{
 	byte x,y;
@@ -153,5 +205,9 @@ class Koordinaten{
 	}
 	byte getY(){
 		return y;
+	}
+
+	boolean equals(Koordinaten z){
+		return(x==z.getX()&&y==z.getY());
 	}
 }
